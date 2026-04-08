@@ -451,6 +451,7 @@ export function FailedTransactionsCorrelations({ onFilter }: { onFilter: () => v
         <EuiFlexItem grow={false}>
           <OpenInDiscover
             dataTestSubj="apmFailedCorrelationsViewInDiscoverButton"
+            dataSource="failedTransactionsCorrelations"
             label={i18n.translate('xpack.apm.failedTransactionsCorrelations.openInDiscover', {
               defaultMessage: 'Open in Discover',
             })}

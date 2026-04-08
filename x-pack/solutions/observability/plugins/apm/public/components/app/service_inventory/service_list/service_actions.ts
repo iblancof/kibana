@@ -47,6 +47,8 @@ export function useServiceActions({
           name: i18n.translate('xpack.apm.servicesTable.actions.openTracesInDiscover', {
             defaultMessage: 'Open traces in Discover',
           }),
+          dataAction: 'openInDiscover',
+          dataSource: 'servicesTableTraces',
           href: (item) => getDiscoverHref(item, 'traces'),
         },
         {
@@ -54,6 +56,8 @@ export function useServiceActions({
           name: i18n.translate('xpack.apm.servicesTable.actions.openLogsInDiscover', {
             defaultMessage: 'Open logs in Discover',
           }),
+          dataAction: 'openInDiscover',
+          dataSource: 'servicesTableLogs',
           href: (item) => getDiscoverHref(item, 'error'),
         },
       ],

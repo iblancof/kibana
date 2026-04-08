@@ -75,6 +75,8 @@ export interface TableActionSubItem<T> {
   onClick?: (item: T) => void;
   href?: (item: T) => string | undefined;
   icon?: string;
+  dataAction?: string;
+  dataSource?: string;
 }
 
 export interface TableAction<T> {
@@ -84,6 +86,8 @@ export interface TableAction<T> {
   href?: (item: T) => string | undefined;
   icon?: string;
   items?: Array<TableActionSubItem<T>>;
+  dataAction?: string;
+  dataSource?: string;
 }
 
 export interface TableActionGroup<T> {
@@ -104,12 +108,16 @@ function resolveTableActions<T>(actions: TableActions<T>, item: T): ActionGroups
       icon: action.icon,
       onClick: action.onClick ? () => action.onClick!(item) : undefined,
       href: action.href ? action.href(item) : undefined,
+      'data-action': action.dataAction,
+      'data-source': action.dataSource,
       items: action.items?.map((subItem) => ({
         id: subItem.id,
         name: subItem.name,
         icon: subItem.icon,
         onClick: subItem.onClick ? () => subItem.onClick!(item) : undefined,
         href: subItem.href ? subItem.href(item) : undefined,
+        'data-action': subItem.dataAction,
+        'data-source': subItem.dataSource,
       })),
     })),
   }));

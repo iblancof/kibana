@@ -99,6 +99,7 @@ export function ErrorDistribution({ distribution, title, fetchStatus, discoverPa
           <EuiFlexItem grow={false}>
             <OpenInDiscover
               dataTestSubj="errorGroupDetailsOpenErrorInDiscoverButton"
+              dataSource="errorDistribution"
               label={discoverParams.label}
               variant="iconButton"
               indexType="error"
