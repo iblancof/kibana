@@ -94,6 +94,7 @@ export const OptionsListControl = ({
 }) => {
   const popoverId = useMemo(() => htmlIdGenerator()(), []);
   const { componentApi, displaySettings, customStrings } = useOptionsListContext();
+  const isESQLControl = !isDSLOptionsListApi(componentApi);
 
   const [isPopoverOpen, setPopoverOpen] = useState<boolean>(false);
 
@@ -234,6 +235,8 @@ export const OptionsListControl = ({
       aria-expanded={isPopoverOpen}
       aria-controls={popoverId}
       data-test-subj={`optionsList-control-${componentApi.uuid}`}
+      data-action={isESQLControl ? 'openESQLControl' : undefined}
+      data-source={isESQLControl ? componentApi.uuid : undefined}
     >
       {Boolean(selectedOptionsCount) && (
         <EuiNotificationBadge color="success">{selectedOptionsCount}</EuiNotificationBadge>
