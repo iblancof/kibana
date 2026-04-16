@@ -216,7 +216,7 @@ export function ErrorSampleDetails({
         <EuiFlexItem grow={false}>
           <OpenInDiscover
             dataTestSubj="errorSampleOpenInDiscoverButton"
-            dataSource="errorSampleDetails"
+            dataContext="errorSampleDetails"
             variant="iconButton"
             label={i18n.translate('xpack.apm.errorSampleDetails.openErrorInDiscover', {
               defaultMessage: 'Open error in Discover',

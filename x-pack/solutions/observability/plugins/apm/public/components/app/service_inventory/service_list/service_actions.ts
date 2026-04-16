@@ -48,7 +48,7 @@ export function useServiceActions({
             defaultMessage: 'Open traces in Discover',
           }),
           dataAction: 'openInDiscover',
-          dataSource: 'servicesTableTraces',
+          dataContext: 'servicesTableTraces',
           href: (item) => getDiscoverHref(item, 'traces'),
         },
         {
@@ -57,7 +57,7 @@ export function useServiceActions({
             defaultMessage: 'Open logs in Discover',
           }),
           dataAction: 'openInDiscover',
-          dataSource: 'servicesTableLogs',
+          dataContext: 'servicesTableLogs',
           href: (item) => getDiscoverHref(item, 'error'),
         },
       ],

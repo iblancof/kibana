@@ -344,7 +344,7 @@ export function LatencyCorrelations({ onFilter }: { onFilter: () => void }) {
         <EuiFlexItem grow={false}>
           <OpenInDiscover
             dataTestSubj="apmLatencyCorrelationsOpenInDiscoverButton"
-            dataSource="latencyCorrelations"
+            dataContext="latencyCorrelations"
             label={i18n.translate('xpack.apm.latencyCorrelations.openInDiscover', {
               defaultMessage: 'Open in Discover',
             })}

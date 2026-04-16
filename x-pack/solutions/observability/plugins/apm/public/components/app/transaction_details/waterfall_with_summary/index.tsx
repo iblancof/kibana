@@ -194,7 +194,7 @@ export function WaterfallWithSummary<TSample extends {}>({
                 <OpenInDiscover
                   variant="emptyButton"
                   dataTestSubj="apmWaterfallOpenInDiscoverButton"
-                  dataSource="waterfallWithSummary"
+                  dataContext="waterfallWithSummary"
                   indexType="traces"
                   rangeFrom={rangeFrom}
                   rangeTo={rangeTo}

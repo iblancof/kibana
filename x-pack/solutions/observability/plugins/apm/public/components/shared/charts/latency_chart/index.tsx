@@ -143,7 +143,7 @@ export function LatencyChart({ height, kuery }: Props) {
             <OpenInDiscover
               variant="iconButton"
               dataTestSubj="apmLatencyChartOpenInDiscover"
-              dataSource="latencyChart"
+              dataContext="latencyChart"
               label={i18n.translate('xpack.apm.latencyChart.openTracesInDiscover', {
                 defaultMessage: 'Open traces in Discover',
               })}

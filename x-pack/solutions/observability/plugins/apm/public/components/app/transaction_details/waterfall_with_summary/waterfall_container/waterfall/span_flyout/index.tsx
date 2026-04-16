@@ -155,7 +155,7 @@ export function SpanFlyout({
               <EuiFlexItem grow={false}>
                 <OpenInDiscover
                   dataTestSubj="spanFlyoutViewSpanInDiscoverLink"
-                  dataSource="spanFlyout"
+                  dataContext="spanFlyout"
                   label={i18n.translate('xpack.apm.spanFlyout.openInDiscover', {
                     defaultMessage: 'Open in Discover',
                   })}

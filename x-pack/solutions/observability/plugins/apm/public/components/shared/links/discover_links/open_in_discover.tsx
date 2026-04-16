@@ -23,7 +23,7 @@ type DiscoverButtonVariant = 'button' | 'emptyButton' | 'iconButton' | 'link';
 
 interface OpenInDiscoverProps {
   dataTestSubj: string;
-  dataSource: string;
+  dataContext: string;
   label: string;
   variant: DiscoverButtonVariant;
   indexType: 'traces' | 'error';
@@ -34,7 +34,7 @@ interface OpenInDiscoverProps {
 
 export function OpenInDiscover({
   dataTestSubj,
-  dataSource,
+  dataContext,
   label,
   variant,
   indexType,
@@ -59,7 +59,7 @@ export function OpenInDiscover({
         <EuiButton
           data-test-subj={dataTestSubj}
           data-action="openInDiscover"
-          data-source={dataSource}
+          data-context={dataContext}
           aria-label={label}
           isLoading={indexSettingsStatus === FETCH_STATUS.LOADING}
           isDisabled={isDisabled}
@@ -74,7 +74,7 @@ export function OpenInDiscover({
         <EuiButtonEmpty
           data-test-subj={dataTestSubj}
           data-action="openInDiscover"
-          data-source={dataSource}
+          data-context={dataContext}
           aria-label={label}
           isLoading={indexSettingsStatus === FETCH_STATUS.LOADING}
           isDisabled={isDisabled}
@@ -90,7 +90,7 @@ export function OpenInDiscover({
           <EuiButtonIcon
             data-test-subj={dataTestSubj}
             data-action="openInDiscover"
-            data-source={dataSource}
+            data-context={dataContext}
             aria-label={label}
             isLoading={indexSettingsStatus === FETCH_STATUS.LOADING}
             isDisabled={isDisabled}
@@ -104,7 +104,7 @@ export function OpenInDiscover({
         <EuiLink
           data-test-subj={dataTestSubj}
           data-action="openInDiscover"
-          data-source={dataSource}
+          data-context={dataContext}
           css={linkStyle}
           {...(isDisabled ? { disabled: true, color: 'subdued' } : { href: discoverHref })}
         >

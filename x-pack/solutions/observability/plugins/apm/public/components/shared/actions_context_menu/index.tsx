@@ -16,7 +16,7 @@ export interface ActionSubItem {
   href?: string;
   icon?: string;
   'data-action'?: string;
-  'data-source'?: string;
+  'data-context'?: string;
 }
 
 export interface Action {
@@ -27,7 +27,7 @@ export interface Action {
   icon?: string;
   items?: ActionSubItem[];
   'data-action'?: string;
-  'data-source'?: string;
+  'data-context'?: string;
 }
 
 export interface ActionGroup {
@@ -116,7 +116,7 @@ export function ActionsContextMenu({
                   }),
               'data-test-subj': `${dataTestSubjPrefix}Item-${subItem.id}`,
               ...(subItem['data-action'] ? { 'data-action': subItem['data-action'] } : {}),
-              ...(subItem['data-source'] ? { 'data-source': subItem['data-source'] } : {}),
+              ...(subItem['data-context'] ? { 'data-context': subItem['data-context'] } : {}),
             })),
           });
         } else if (action.href != null || action.onClick != null) {
@@ -133,7 +133,7 @@ export function ActionsContextMenu({
                 }),
             'data-test-subj': `${dataTestSubjPrefix}Item-${action.id}`,
             ...(action['data-action'] ? { 'data-action': action['data-action'] } : {}),
-            ...(action['data-source'] ? { 'data-source': action['data-source'] } : {}),
+            ...(action['data-context'] ? { 'data-context': action['data-context'] } : {}),
           });
         }
       }

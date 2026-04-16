@@ -46,7 +46,7 @@ export function useTransactionActions({
               defaultMessage: 'Open traces in Discover',
             }),
             dataAction: 'openInDiscover',
-            dataSource: 'transactionsTable',
+            dataContext: 'transactionsTable',
             href: (item) => {
               const esqlQuery = getESQLQuery({
                 indexType: 'traces',

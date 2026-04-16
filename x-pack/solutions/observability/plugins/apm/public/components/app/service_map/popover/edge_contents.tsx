@@ -131,7 +131,7 @@ export function EdgeContents({
           <EuiFlexItem>
             <OpenInDiscover
               dataTestSubj="apmEdgeContentsOpenInDiscoverButton"
-              dataSource="serviceMapEdge"
+              dataContext="serviceMapEdge"
               variant="button"
               indexType="traces"
               label={i18n.translate('xpack.apm.serviceMap.edgeContents.openInDiscover', {
