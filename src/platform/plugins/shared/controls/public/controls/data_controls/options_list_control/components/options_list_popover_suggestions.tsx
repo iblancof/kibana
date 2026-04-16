@@ -38,8 +38,6 @@ export const OptionsListPopoverSuggestions = ({
     componentApi,
     displaySettings: { hide_exists },
   } = useOptionsListContext();
-  const isESQLControl = !isDSLOptionsListApi(componentApi);
-
   const { euiTheme } = useEuiTheme();
   const styles = useMemoCss(optionListPopoverSuggestionsStyles);
 
@@ -207,12 +205,7 @@ export const OptionsListPopoverSuggestions = ({
 
   return (
     <>
-      <div
-        data-test-subj="optionsList--scrollListener"
-        ref={listRef}
-        data-action={isESQLControl ? 'selectESQLControlOption' : undefined}
-        data-source={isESQLControl ? componentApi.uuid : undefined}
-      >
+      <div data-test-subj="optionsList--scrollListener" ref={listRef}>
         <EuiSelectable
           options={selectableOptions}
           renderOption={(option) => renderOption(option, searchString)}
