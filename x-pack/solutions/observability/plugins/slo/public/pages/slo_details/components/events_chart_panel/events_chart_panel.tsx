@@ -172,6 +172,7 @@ export function EventsChartPanel({ slo, range, dynamicTimeRange = false, onBrush
               <EuiLink
                 href={viewEventsHref}
                 data-test-subj="sloDetailDiscoverLink"
+                data-context="sloDetailsEventsChart"
                 data-source={slo.indicator.type}
                 data-action={
                   slo.indicator.type !== 'sli.metric.timeslice' ? 'viewGoodVsBadEvents' : undefined

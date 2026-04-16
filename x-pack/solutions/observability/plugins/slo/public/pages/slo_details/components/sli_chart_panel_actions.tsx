@@ -112,6 +112,7 @@ export function SliChartPanelActions({ slo, timeRange }: SliChartPanelActionsPro
           disabled={!isApmLinkEnabled}
           data-test-subj="sliHistoryChartViewInApmLink"
           data-action="openInApm"
+          data-context="sliChartActions"
           data-source={slo.indicator.type}
         >
           {inApmLabel}
@@ -121,6 +122,7 @@ export function SliChartPanelActions({ slo, timeRange }: SliChartPanelActionsPro
           disabled={!isDiscoverLinkEnabled}
           data-test-subj="sliHistoryChartOpenInDiscoverLink"
           data-action="openTracesInDiscover"
+          data-context="sliChartActions"
           data-source={slo.indicator.type}
         >
           {tracesInDiscoverLabel}
