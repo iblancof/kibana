@@ -438,77 +438,7 @@ paths:
             application/json:
               schema:
                 items:
-                  additionalProperties: false
-                  type: object
-                  properties:
-                    allow_multiple_system_actions:
-                      description: Indicates whether multiple instances of the same system action connector can be used in a single rule.
-                      type: boolean
-                    description:
-                      description: Description of the connector type.
-                      type: string
-                    enabled:
-                      description: Indicates whether the connector is enabled.
-                      type: boolean
-                    enabled_in_config:
-                      description: Indicates whether the connector is enabled in the Kibana configuration.
-                      type: boolean
-                    enabled_in_license:
-                      description: Indicates whether the connector is enabled through the license.
-                      type: boolean
-                    id:
-                      description: The identifier for the connector.
-                      type: string
-                    is_deprecated:
-                      description: Indicates whether the connector type is deprecated.
-                      type: boolean
-                    is_experimental:
-                      description: Indicates whether the connector type is in technical preview.
-                      type: boolean
-                    is_system_action_type:
-                      description: Indicates whether the action is a system action.
-                      type: boolean
-                    minimum_license_required:
-                      description: The minimum license required to enable the connector.
-                      enum:
-                        - basic
-                        - standard
-                        - gold
-                        - platinum
-                        - enterprise
-                        - trial
-                      type: string
-                    name:
-                      description: The name of the connector type.
-                      type: string
-                    source:
-                      description: The source of the connector type definition.
-                      enum:
-                        - yml
-                        - spec
-                        - stack
-                      type: string
-                    sub_feature:
-                      description: Indicates the sub-feature type the connector is grouped under.
-                      enum:
-                        - endpointSecurity
-                      type: string
-                    supported_feature_ids:
-                      description: The list of supported features
-                      items:
-                        type: string
-                      type: array
-                  required:
-                    - id
-                    - name
-                    - enabled
-                    - enabled_in_config
-                    - enabled_in_license
-                    - minimum_license_required
-                    - supported_feature_ids
-                    - is_system_action_type
-                    - is_deprecated
-                    - source
+                  $ref: '#/components/schemas/Kibana_HTTP_APIs_connector_type_response'
                 type: array
               examples:
                 getConnectorTypesServerlessResponse:
@@ -649,51 +579,7 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: false
-                type: object
-                properties:
-                  auth_mode:
-                    description: The authentication mode used for the connector.
-                    enum:
-                      - shared
-                      - per-user
-                    type: string
-                  config:
-                    additionalProperties:
-                      nullable: true
-                    type: object
-                  connector_type_id:
-                    description: The connector type identifier.
-                    type: string
-                  id:
-                    description: The identifier for the connector.
-                    type: string
-                  is_connector_type_deprecated:
-                    description: Indicates whether the connector type is deprecated.
-                    type: boolean
-                  is_deprecated:
-                    description: Indicates whether the connector is deprecated.
-                    type: boolean
-                  is_missing_secrets:
-                    description: Indicates whether the connector is missing secrets.
-                    type: boolean
-                  is_preconfigured:
-                    description: 'Indicates whether the connector is preconfigured. If true, the `config` and `is_missing_secrets` properties are omitted from the response. '
-                    type: boolean
-                  is_system_action:
-                    description: Indicates whether the connector is used for system actions.
-                    type: boolean
-                  name:
-                    description: ' The name of the connector.'
-                    type: string
-                required:
-                  - id
-                  - name
-                  - connector_type_id
-                  - is_preconfigured
-                  - is_deprecated
-                  - is_system_action
-                  - is_connector_type_deprecated
+                $ref: '#/components/schemas/Kibana_HTTP_APIs_connector_response'
               examples:
                 getConnectorResponse:
                   $ref: '#/components/examples/get_connector_response'
@@ -734,73 +620,7 @@ paths:
         content:
           application/json:
             schema:
-              additionalProperties: false
-              type: object
-              properties:
-                connector_type_id:
-                  description: The type of connector.
-                  type: string
-                name:
-                  description: The display name for the connector.
-                  type: string
-                config:
-                  additionalProperties: {}
-                  default: {}
-                  description: The connector configuration details.
-                  oneOf:
-                    - $ref: '#/components/schemas/bedrock_config'
-                    - $ref: '#/components/schemas/crowdstrike_config'
-                    - $ref: '#/components/schemas/d3security_config'
-                    - $ref: '#/components/schemas/email_config'
-                    - $ref: '#/components/schemas/gemini_config'
-                    - $ref: '#/components/schemas/resilient_config'
-                    - $ref: '#/components/schemas/index_config'
-                    - $ref: '#/components/schemas/jira_config'
-                    - $ref: '#/components/schemas/genai_azure_config'
-                    - $ref: '#/components/schemas/genai_openai_config'
-                    - $ref: '#/components/schemas/genai_openai_other_config'
-                    - $ref: '#/components/schemas/opsgenie_config'
-                    - $ref: '#/components/schemas/pagerduty_config'
-                    - $ref: '#/components/schemas/sentinelone_config'
-                    - $ref: '#/components/schemas/servicenow_config'
-                    - $ref: '#/components/schemas/servicenow_itom_config'
-                    - $ref: '#/components/schemas/slack_api_config'
-                    - $ref: '#/components/schemas/swimlane_config'
-                    - $ref: '#/components/schemas/thehive_config'
-                    - $ref: '#/components/schemas/tines_config'
-                    - $ref: '#/components/schemas/torq_config'
-                    - $ref: '#/components/schemas/webhook_config'
-                    - $ref: '#/components/schemas/cases_webhook_config'
-                    - $ref: '#/components/schemas/xmatters_config'
-                secrets:
-                  additionalProperties: {}
-                  default: {}
-                  oneOf:
-                    - $ref: '#/components/schemas/bedrock_secrets'
-                    - $ref: '#/components/schemas/crowdstrike_secrets'
-                    - $ref: '#/components/schemas/d3security_secrets'
-                    - $ref: '#/components/schemas/email_secrets'
-                    - $ref: '#/components/schemas/gemini_secrets'
-                    - $ref: '#/components/schemas/resilient_secrets'
-                    - $ref: '#/components/schemas/jira_secrets'
-                    - $ref: '#/components/schemas/defender_secrets'
-                    - $ref: '#/components/schemas/teams_secrets'
-                    - $ref: '#/components/schemas/genai_secrets'
-                    - $ref: '#/components/schemas/opsgenie_secrets'
-                    - $ref: '#/components/schemas/pagerduty_secrets'
-                    - $ref: '#/components/schemas/sentinelone_secrets'
-                    - $ref: '#/components/schemas/servicenow_secrets'
-                    - $ref: '#/components/schemas/slack_api_secrets'
-                    - $ref: '#/components/schemas/swimlane_secrets'
-                    - $ref: '#/components/schemas/thehive_secrets'
-                    - $ref: '#/components/schemas/tines_secrets'
-                    - $ref: '#/components/schemas/torq_secrets'
-                    - $ref: '#/components/schemas/webhook_secrets'
-                    - $ref: '#/components/schemas/cases_webhook_secrets'
-                    - $ref: '#/components/schemas/xmatters_secrets'
-              required:
-                - name
-                - connector_type_id
+              $ref: '#/components/schemas/Kibana_HTTP_APIs_new_connector'
             examples:
               createEmailConnectorRequest:
                 $ref: '#/components/examples/create_email_connector_request'
@@ -815,51 +635,7 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: false
-                type: object
-                properties:
-                  auth_mode:
-                    description: The authentication mode used for the connector.
-                    enum:
-                      - shared
-                      - per-user
-                    type: string
-                  config:
-                    additionalProperties:
-                      nullable: true
-                    type: object
-                  connector_type_id:
-                    description: The connector type identifier.
-                    type: string
-                  id:
-                    description: The identifier for the connector.
-                    type: string
-                  is_connector_type_deprecated:
-                    description: Indicates whether the connector type is deprecated.
-                    type: boolean
-                  is_deprecated:
-                    description: Indicates whether the connector is deprecated.
-                    type: boolean
-                  is_missing_secrets:
-                    description: Indicates whether the connector is missing secrets.
-                    type: boolean
-                  is_preconfigured:
-                    description: 'Indicates whether the connector is preconfigured. If true, the `config` and `is_missing_secrets` properties are omitted from the response. '
-                    type: boolean
-                  is_system_action:
-                    description: Indicates whether the connector is used for system actions.
-                    type: boolean
-                  name:
-                    description: ' The name of the connector.'
-                    type: string
-                required:
-                  - id
-                  - name
-                  - connector_type_id
-                  - is_preconfigured
-                  - is_deprecated
-                  - is_system_action
-                  - is_connector_type_deprecated
+                $ref: '#/components/schemas/Kibana_HTTP_APIs_connector_response'
               examples:
                 createEmailConnectorResponse:
                   $ref: '#/components/examples/create_email_connector_response'
@@ -904,68 +680,7 @@ paths:
         content:
           application/json:
             schema:
-              additionalProperties: false
-              type: object
-              properties:
-                name:
-                  description: The display name for the connector.
-                  type: string
-                config:
-                  additionalProperties: {}
-                  default: {}
-                  description: The connector configuration details.
-                  oneOf:
-                    - $ref: '#/components/schemas/bedrock_config'
-                    - $ref: '#/components/schemas/crowdstrike_config'
-                    - $ref: '#/components/schemas/d3security_config'
-                    - $ref: '#/components/schemas/email_config'
-                    - $ref: '#/components/schemas/gemini_config'
-                    - $ref: '#/components/schemas/resilient_config'
-                    - $ref: '#/components/schemas/index_config'
-                    - $ref: '#/components/schemas/jira_config'
-                    - $ref: '#/components/schemas/defender_config'
-                    - $ref: '#/components/schemas/genai_azure_config'
-                    - $ref: '#/components/schemas/genai_openai_config'
-                    - $ref: '#/components/schemas/opsgenie_config'
-                    - $ref: '#/components/schemas/pagerduty_config'
-                    - $ref: '#/components/schemas/sentinelone_config'
-                    - $ref: '#/components/schemas/servicenow_config'
-                    - $ref: '#/components/schemas/servicenow_itom_config'
-                    - $ref: '#/components/schemas/slack_api_config'
-                    - $ref: '#/components/schemas/swimlane_config'
-                    - $ref: '#/components/schemas/thehive_config'
-                    - $ref: '#/components/schemas/tines_config'
-                    - $ref: '#/components/schemas/torq_config'
-                    - $ref: '#/components/schemas/webhook_config'
-                    - $ref: '#/components/schemas/cases_webhook_config'
-                    - $ref: '#/components/schemas/xmatters_config'
-                secrets:
-                  additionalProperties: {}
-                  default: {}
-                  oneOf:
-                    - $ref: '#/components/schemas/bedrock_secrets'
-                    - $ref: '#/components/schemas/crowdstrike_secrets'
-                    - $ref: '#/components/schemas/d3security_secrets'
-                    - $ref: '#/components/schemas/email_secrets'
-                    - $ref: '#/components/schemas/gemini_secrets'
-                    - $ref: '#/components/schemas/resilient_secrets'
-                    - $ref: '#/components/schemas/jira_secrets'
-                    - $ref: '#/components/schemas/teams_secrets'
-                    - $ref: '#/components/schemas/genai_secrets'
-                    - $ref: '#/components/schemas/opsgenie_secrets'
-                    - $ref: '#/components/schemas/pagerduty_secrets'
-                    - $ref: '#/components/schemas/sentinelone_secrets'
-                    - $ref: '#/components/schemas/servicenow_secrets'
-                    - $ref: '#/components/schemas/slack_api_secrets'
-                    - $ref: '#/components/schemas/swimlane_secrets'
-                    - $ref: '#/components/schemas/thehive_secrets'
-                    - $ref: '#/components/schemas/tines_secrets'
-                    - $ref: '#/components/schemas/torq_secrets'
-                    - $ref: '#/components/schemas/webhook_secrets'
-                    - $ref: '#/components/schemas/cases_webhook_secrets'
-                    - $ref: '#/components/schemas/xmatters_secrets'
-              required:
-                - name
+              $ref: '#/components/schemas/Kibana_HTTP_APIs_update_connector'
             examples:
               updateIndexConnectorRequest:
                 $ref: '#/components/examples/update_index_connector_request'
@@ -974,51 +689,7 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: false
-                type: object
-                properties:
-                  auth_mode:
-                    description: The authentication mode used for the connector.
-                    enum:
-                      - shared
-                      - per-user
-                    type: string
-                  config:
-                    additionalProperties:
-                      nullable: true
-                    type: object
-                  connector_type_id:
-                    description: The connector type identifier.
-                    type: string
-                  id:
-                    description: The identifier for the connector.
-                    type: string
-                  is_connector_type_deprecated:
-                    description: Indicates whether the connector type is deprecated.
-                    type: boolean
-                  is_deprecated:
-                    description: Indicates whether the connector is deprecated.
-                    type: boolean
-                  is_missing_secrets:
-                    description: Indicates whether the connector is missing secrets.
-                    type: boolean
-                  is_preconfigured:
-                    description: 'Indicates whether the connector is preconfigured. If true, the `config` and `is_missing_secrets` properties are omitted from the response. '
-                    type: boolean
-                  is_system_action:
-                    description: Indicates whether the connector is used for system actions.
-                    type: boolean
-                  name:
-                    description: ' The name of the connector.'
-                    type: string
-                required:
-                  - id
-                  - name
-                  - connector_type_id
-                  - is_preconfigured
-                  - is_deprecated
-                  - is_system_action
-                  - is_connector_type_deprecated
+                $ref: '#/components/schemas/Kibana_HTTP_APIs_connector_response'
           description: Indicates a successful call.
         '403':
           description: Indicates that this call is forbidden.
@@ -1063,36 +734,7 @@ paths:
         content:
           application/json:
             schema:
-              additionalProperties: false
-              type: object
-              properties:
-                params:
-                  additionalProperties: {}
-                  oneOf:
-                    - $ref: '#/components/schemas/run_acknowledge_resolve_pagerduty'
-                    - $ref: '#/components/schemas/run_documents'
-                    - $ref: '#/components/schemas/run_message_email'
-                    - $ref: '#/components/schemas/run_message_serverlog'
-                    - $ref: '#/components/schemas/run_message_slack'
-                    - $ref: '#/components/schemas/run_trigger_pagerduty'
-                    - $ref: '#/components/schemas/run_addevent'
-                    - $ref: '#/components/schemas/run_closealert'
-                    - $ref: '#/components/schemas/run_closeincident'
-                    - $ref: '#/components/schemas/run_createalert'
-                    - $ref: '#/components/schemas/run_fieldsbyissuetype'
-                    - $ref: '#/components/schemas/run_getagentdetails'
-                    - $ref: '#/components/schemas/run_getagents'
-                    - $ref: '#/components/schemas/run_getchoices'
-                    - $ref: '#/components/schemas/run_getfields'
-                    - $ref: '#/components/schemas/run_getincident'
-                    - $ref: '#/components/schemas/run_issue'
-                    - $ref: '#/components/schemas/run_issues'
-                    - $ref: '#/components/schemas/run_issuetypes'
-                    - $ref: '#/components/schemas/run_postmessage'
-                    - $ref: '#/components/schemas/run_pushtoservice'
-                    - $ref: '#/components/schemas/run_validchannelid'
-              required:
-                - params
+              $ref: '#/components/schemas/Kibana_HTTP_APIs_connector_execute_request'
             examples:
               runIndexConnectorRequest:
                 $ref: '#/components/examples/run_index_connector_request'
@@ -1109,51 +751,7 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: false
-                type: object
-                properties:
-                  auth_mode:
-                    description: The authentication mode used for the connector.
-                    enum:
-                      - shared
-                      - per-user
-                    type: string
-                  config:
-                    additionalProperties:
-                      nullable: true
-                    type: object
-                  connector_type_id:
-                    description: The connector type identifier.
-                    type: string
-                  id:
-                    description: The identifier for the connector.
-                    type: string
-                  is_connector_type_deprecated:
-                    description: Indicates whether the connector type is deprecated.
-                    type: boolean
-                  is_deprecated:
-                    description: Indicates whether the connector is deprecated.
-                    type: boolean
-                  is_missing_secrets:
-                    description: Indicates whether the connector is missing secrets.
-                    type: boolean
-                  is_preconfigured:
-                    description: 'Indicates whether the connector is preconfigured. If true, the `config` and `is_missing_secrets` properties are omitted from the response. '
-                    type: boolean
-                  is_system_action:
-                    description: Indicates whether the connector is used for system actions.
-                    type: boolean
-                  name:
-                    description: ' The name of the connector.'
-                    type: string
-                required:
-                  - id
-                  - name
-                  - connector_type_id
-                  - is_preconfigured
-                  - is_deprecated
-                  - is_system_action
-                  - is_connector_type_deprecated
+                $ref: '#/components/schemas/Kibana_HTTP_APIs_connector_response'
               examples:
                 runIndexConnectorResponse:
                   $ref: '#/components/examples/run_index_connector_response'
@@ -1186,55 +784,7 @@ paths:
             application/json:
               schema:
                 items:
-                  additionalProperties: false
-                  type: object
-                  properties:
-                    auth_mode:
-                      description: The authentication mode used for the connector.
-                      enum:
-                        - shared
-                        - per-user
-                      type: string
-                    config:
-                      additionalProperties:
-                        nullable: true
-                      type: object
-                    connector_type_id:
-                      description: The connector type identifier.
-                      type: string
-                    id:
-                      description: The identifier for the connector.
-                      type: string
-                    is_connector_type_deprecated:
-                      description: Indicates whether the connector type is deprecated.
-                      type: boolean
-                    is_deprecated:
-                      description: Indicates whether the connector is deprecated.
-                      type: boolean
-                    is_missing_secrets:
-                      description: Indicates whether the connector is missing secrets.
-                      type: boolean
-                    is_preconfigured:
-                      description: 'Indicates whether the connector is preconfigured. If true, the `config` and `is_missing_secrets` properties are omitted from the response. '
-                      type: boolean
-                    is_system_action:
-                      description: Indicates whether the connector is used for system actions.
-                      type: boolean
-                    name:
-                      description: ' The name of the connector.'
-                      type: string
-                    referenced_by_count:
-                      description: The number of saved objects that reference the connector. If is_preconfigured is true, this value is not calculated.
-                      type: number
-                  required:
-                    - id
-                    - name
-                    - connector_type_id
-                    - is_preconfigured
-                    - is_deprecated
-                    - is_system_action
-                    - is_connector_type_deprecated
-                    - referenced_by_count
+                  $ref: '#/components/schemas/Kibana_HTTP_APIs_connector_response_with_references_count'
                 type: array
               examples:
                 getConnectorsResponse:
@@ -3199,6 +2749,14 @@ paths:
                           nullable: true
                         description: Payload of the attachment. Required unless `origin` is provided (content is resolved once at send time).
                         type: object
+                      description:
+                        description: Human-readable label for the attachment.
+                        maxLength: 1024
+                        type: string
+                      group_id:
+                        description: Stable identifier for the logical group this attachment belongs to. Attachments sharing the same group_id were submitted together as a single logical entity.
+                        maxLength: 256
+                        type: string
                       hidden:
                         description: When true, the attachment will not be displayed in the UI.
                         type: boolean
@@ -3279,14 +2837,22 @@ paths:
                   type: string
                 prompts:
                   additionalProperties:
-                    additionalProperties: false
-                    type: object
-                    properties:
-                      allow:
-                        type: boolean
-                    required:
-                      - allow
-                  description: Can be used to respond to a confirmation prompt.
+                    anyOf:
+                      - additionalProperties: false
+                        type: object
+                        properties:
+                          allow:
+                            type: boolean
+                        required:
+                          - allow
+                      - additionalProperties: false
+                        type: object
+                        properties:
+                          authorized:
+                            type: boolean
+                        required:
+                          - authorized
+                  description: Use this field to respond to a confirmation or authorization prompt. Send an `allow` boolean to answer a confirmation prompt, or an `authorized` boolean to answer an authorization prompt.
                   type: object
       responses:
         '200':
@@ -3582,6 +3148,14 @@ paths:
                           nullable: true
                         description: Payload of the attachment. Required unless `origin` is provided (content is resolved once at send time).
                         type: object
+                      description:
+                        description: Human-readable label for the attachment.
+                        maxLength: 1024
+                        type: string
+                      group_id:
+                        description: Stable identifier for the logical group this attachment belongs to. Attachments sharing the same group_id were submitted together as a single logical entity.
+                        maxLength: 256
+                        type: string
                       hidden:
                         description: When true, the attachment will not be displayed in the UI.
                         type: boolean
@@ -3662,14 +3236,22 @@ paths:
                   type: string
                 prompts:
                   additionalProperties:
-                    additionalProperties: false
-                    type: object
-                    properties:
-                      allow:
-                        type: boolean
-                    required:
-                      - allow
-                  description: Can be used to respond to a confirmation prompt.
+                    anyOf:
+                      - additionalProperties: false
+                        type: object
+                        properties:
+                          allow:
+                            type: boolean
+                        required:
+                          - allow
+                      - additionalProperties: false
+                        type: object
+                        properties:
+                          authorized:
+                            type: boolean
+                        required:
+                          - authorized
+                  description: Use this field to respond to a confirmation or authorization prompt. Send an `allow` boolean to answer a confirmation prompt, or an `authorized` boolean to answer an authorization prompt.
                   type: object
       responses:
         '200':
@@ -20694,72 +20276,12 @@ paths:
       x-metaTags:
         - content: Kibana
           name: product_name
-  /api/endpoint/action/running_procs:
+  /api/endpoint/action/run_script:
     post:
       description: |-
         **Spaces method and path for this operation:**
 
-        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/endpoint/action/running_procs</span></div>
-
-        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
-
-        Get a list of all processes running on an endpoint.
-      operationId: EndpointGetProcessesAction
-      requestBody:
-        content:
-          application/json:
-            examples:
-              singleEndpoint:
-                summary: Get running processes on a single endpoint
-                value:
-                  endpoint_ids:
-                    - ed518850-681a-4d60-bb98-e22640cae2a8
-            schema:
-              $ref: '#/components/schemas/Security_Endpoint_Management_API_GetProcessesRouteRequestBody'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                RunningProcsSuccess:
-                  summary: Running processes action successfully created
-                  value:
-                    data:
-                      agents:
-                        - ed518850-681a-4d60-bb98-e22640cae2a8
-                      agentState:
-                        ed518850-681a-4d60-bb98-e22640cae2a8:
-                          isCompleted: false
-                          wasSuccessful: false
-                      agentType: endpoint
-                      command: running-processes
-                      createdBy: elastic
-                      hosts:
-                        ed518850-681a-4d60-bb98-e22640cae2a8:
-                          name: gke-node-1235412
-                      id: 233db9ea-6733-4849-9226-5a7039c7161d
-                      isCompleted: false
-                      isExpired: false
-                      outputs: {}
-                      startedAt: '2022-07-29T19:08:49.126Z'
-                      status: pending
-                      wasSuccessful: false
-              schema:
-                $ref: '#/components/schemas/Security_Endpoint_Management_API_ResponseActionCreateSuccessResponse'
-          description: Indicates a successful call.
-      summary: Get running processes
-      tags:
-        - Security Endpoint Management API
-      x-metaTags:
-        - content: Kibana
-          name: product_name
-  /api/endpoint/action/runscript:
-    post:
-      description: |-
-        **Spaces method and path for this operation:**
-
-        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/endpoint/action/runscript</span></div>
+        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/endpoint/action/run_script</span></div>
 
         Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
 
@@ -20836,6 +20358,66 @@ paths:
                 $ref: '#/components/schemas/Security_Endpoint_Management_API_ResponseActionCreateSuccessResponse'
           description: Indicates a successful call.
       summary: Run a script
+      tags:
+        - Security Endpoint Management API
+      x-metaTags:
+        - content: Kibana
+          name: product_name
+  /api/endpoint/action/running_procs:
+    post:
+      description: |-
+        **Spaces method and path for this operation:**
+
+        <div><span class="operation-verb post">post</span>&nbsp;<span class="operation-path">/s/{space_id}/api/endpoint/action/running_procs</span></div>
+
+        Refer to [Spaces](https://www.elastic.co/docs/deploy-manage/manage-spaces) for more information.
+
+        Get a list of all processes running on an endpoint.
+      operationId: EndpointGetProcessesAction
+      requestBody:
+        content:
+          application/json:
+            examples:
+              singleEndpoint:
+                summary: Get running processes on a single endpoint
+                value:
+                  endpoint_ids:
+                    - ed518850-681a-4d60-bb98-e22640cae2a8
+            schema:
+              $ref: '#/components/schemas/Security_Endpoint_Management_API_GetProcessesRouteRequestBody'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                RunningProcsSuccess:
+                  summary: Running processes action successfully created
+                  value:
+                    data:
+                      agents:
+                        - ed518850-681a-4d60-bb98-e22640cae2a8
+                      agentState:
+                        ed518850-681a-4d60-bb98-e22640cae2a8:
+                          isCompleted: false
+                          wasSuccessful: false
+                      agentType: endpoint
+                      command: running-processes
+                      createdBy: elastic
+                      hosts:
+                        ed518850-681a-4d60-bb98-e22640cae2a8:
+                          name: gke-node-1235412
+                      id: 233db9ea-6733-4849-9226-5a7039c7161d
+                      isCompleted: false
+                      isExpired: false
+                      outputs: {}
+                      startedAt: '2022-07-29T19:08:49.126Z'
+                      status: pending
+                      wasSuccessful: false
+              schema:
+                $ref: '#/components/schemas/Security_Endpoint_Management_API_ResponseActionCreateSuccessResponse'
+          description: Indicates a successful call.
+      summary: Get running processes
       tags:
         - Security Endpoint Management API
       x-metaTags:
@@ -81633,6 +81215,29 @@ components:
         - metric_field
       title: aiops_change_point_chart
       type: object
+    Kibana_HTTP_APIs_aiops_log_rate_analysis:
+      additionalProperties: false
+      description: Log rate analysis embeddable schema
+      properties:
+        data_view_id:
+          description: The data view ID used to run log rate analysis.
+          maxLength: 1000
+          minLength: 1
+          type: string
+        description:
+          type: string
+        hide_border:
+          type: boolean
+        hide_title:
+          type: boolean
+        time_range:
+          $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-es-query-server-timeRangeSchema'
+        title:
+          type: string
+      required:
+        - data_view_id
+      title: aiops_log_rate_analysis
+      type: object
     Kibana_HTTP_APIs_alerts_filter_query:
       additionalProperties: false
       properties:
@@ -83293,6 +82898,209 @@ components:
               type: array
           required:
             - steps
+    Kibana_HTTP_APIs_connector_execute_request:
+      additionalProperties: false
+      properties:
+        params:
+          additionalProperties: {}
+          oneOf:
+            - $ref: '#/components/schemas/run_acknowledge_resolve_pagerduty'
+            - $ref: '#/components/schemas/run_documents'
+            - $ref: '#/components/schemas/run_message_email'
+            - $ref: '#/components/schemas/run_message_serverlog'
+            - $ref: '#/components/schemas/run_message_slack'
+            - $ref: '#/components/schemas/run_trigger_pagerduty'
+            - $ref: '#/components/schemas/run_addevent'
+            - $ref: '#/components/schemas/run_closealert'
+            - $ref: '#/components/schemas/run_closeincident'
+            - $ref: '#/components/schemas/run_createalert'
+            - $ref: '#/components/schemas/run_fieldsbyissuetype'
+            - $ref: '#/components/schemas/run_getagentdetails'
+            - $ref: '#/components/schemas/run_getagents'
+            - $ref: '#/components/schemas/run_getchoices'
+            - $ref: '#/components/schemas/run_getfields'
+            - $ref: '#/components/schemas/run_getincident'
+            - $ref: '#/components/schemas/run_issue'
+            - $ref: '#/components/schemas/run_issues'
+            - $ref: '#/components/schemas/run_issuetypes'
+            - $ref: '#/components/schemas/run_postmessage'
+            - $ref: '#/components/schemas/run_pushtoservice'
+            - $ref: '#/components/schemas/run_validchannelid'
+      required:
+        - params
+      title: connector_execute_request
+      type: object
+    Kibana_HTTP_APIs_connector_response:
+      additionalProperties: false
+      properties:
+        auth_mode:
+          description: The authentication mode used for the connector.
+          enum:
+            - shared
+            - per-user
+          type: string
+        config:
+          additionalProperties:
+            nullable: true
+          type: object
+        connector_type_id:
+          description: The connector type identifier.
+          type: string
+        id:
+          description: The identifier for the connector.
+          type: string
+        is_connector_type_deprecated:
+          description: Indicates whether the connector type is deprecated.
+          type: boolean
+        is_deprecated:
+          description: Indicates whether the connector is deprecated.
+          type: boolean
+        is_missing_secrets:
+          description: Indicates whether the connector is missing secrets.
+          type: boolean
+        is_preconfigured:
+          description: 'Indicates whether the connector is preconfigured. If true, the `config` and `is_missing_secrets` properties are omitted from the response. '
+          type: boolean
+        is_system_action:
+          description: Indicates whether the connector is used for system actions.
+          type: boolean
+        name:
+          description: ' The name of the connector.'
+          type: string
+      required:
+        - id
+        - name
+        - connector_type_id
+        - is_preconfigured
+        - is_deprecated
+        - is_system_action
+        - is_connector_type_deprecated
+      title: connector_response
+      type: object
+    Kibana_HTTP_APIs_connector_response_with_references_count:
+      additionalProperties: false
+      properties:
+        auth_mode:
+          description: The authentication mode used for the connector.
+          enum:
+            - shared
+            - per-user
+          type: string
+        config:
+          additionalProperties:
+            nullable: true
+          type: object
+        connector_type_id:
+          description: The connector type identifier.
+          type: string
+        id:
+          description: The identifier for the connector.
+          type: string
+        is_connector_type_deprecated:
+          description: Indicates whether the connector type is deprecated.
+          type: boolean
+        is_deprecated:
+          description: Indicates whether the connector is deprecated.
+          type: boolean
+        is_missing_secrets:
+          description: Indicates whether the connector is missing secrets.
+          type: boolean
+        is_preconfigured:
+          description: 'Indicates whether the connector is preconfigured. If true, the `config` and `is_missing_secrets` properties are omitted from the response. '
+          type: boolean
+        is_system_action:
+          description: Indicates whether the connector is used for system actions.
+          type: boolean
+        name:
+          description: ' The name of the connector.'
+          type: string
+        referenced_by_count:
+          description: The number of saved objects that reference the connector. If is_preconfigured is true, this value is not calculated.
+          type: number
+      required:
+        - id
+        - name
+        - connector_type_id
+        - is_preconfigured
+        - is_deprecated
+        - is_system_action
+        - is_connector_type_deprecated
+        - referenced_by_count
+      title: connector_response_with_references_count
+      type: object
+    Kibana_HTTP_APIs_connector_type_response:
+      additionalProperties: false
+      properties:
+        allow_multiple_system_actions:
+          description: Indicates whether multiple instances of the same system action connector can be used in a single rule.
+          type: boolean
+        description:
+          description: Description of the connector type.
+          type: string
+        enabled:
+          description: Indicates whether the connector is enabled.
+          type: boolean
+        enabled_in_config:
+          description: Indicates whether the connector is enabled in the Kibana configuration.
+          type: boolean
+        enabled_in_license:
+          description: Indicates whether the connector is enabled through the license.
+          type: boolean
+        id:
+          description: The identifier for the connector.
+          type: string
+        is_deprecated:
+          description: Indicates whether the connector type is deprecated.
+          type: boolean
+        is_experimental:
+          description: Indicates whether the connector type is in technical preview.
+          type: boolean
+        is_system_action_type:
+          description: Indicates whether the action is a system action.
+          type: boolean
+        minimum_license_required:
+          description: The minimum license required to enable the connector.
+          enum:
+            - basic
+            - standard
+            - gold
+            - platinum
+            - enterprise
+            - trial
+          type: string
+        name:
+          description: The name of the connector type.
+          type: string
+        source:
+          description: The source of the connector type definition.
+          enum:
+            - yml
+            - spec
+            - stack
+          type: string
+        sub_feature:
+          description: Indicates the sub-feature type the connector is grouped under.
+          enum:
+            - endpointSecurity
+          type: string
+        supported_feature_ids:
+          description: The list of supported features
+          items:
+            type: string
+          type: array
+      required:
+        - id
+        - name
+        - enabled
+        - enabled_in_config
+        - enabled_in_license
+        - minimum_license_required
+        - supported_feature_ids
+        - is_system_action_type
+        - is_deprecated
+        - source
+      title: connector_type_response
+      type: object
     Kibana_HTTP_APIs_ContentPackIncludedObjects:
       anyOf:
         - additionalProperties: false
@@ -84403,6 +84211,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         rows:
           description: Array of operations to split the datatable rows by
@@ -85668,6 +85477,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         rows:
           description: Array of operations to split the datatable rows by
@@ -88133,6 +87943,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -89016,6 +88827,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -90200,6 +90012,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -90898,6 +90711,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -91249,6 +91063,10 @@ components:
                       - after
                       - fixed_interval
                   type: array
+                frozen_after:
+                  description: A non-empty string.
+                  minLength: 1
+                  type: string
           required:
             - dsl
         - additionalProperties: false
@@ -92372,6 +92190,7 @@ components:
                   - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-esql_control'
                   - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-image'
                   - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-links'
+                  - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-aiops_log_rate_analysis'
                   - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-markdown'
                   - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-options_list_control'
                   - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-range_slider_control'
@@ -92546,6 +92365,26 @@ components:
         - type
         - config
       title: Change point detection chart
+      type: object
+    Kibana_HTTP_APIs_kbn-dashboard-panel-type-aiops_log_rate_analysis:
+      additionalProperties: false
+      properties:
+        config:
+          $ref: '#/components/schemas/Kibana_HTTP_APIs_aiops_log_rate_analysis'
+        grid:
+          $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-grid'
+        id:
+          description: The unique ID of the panel.
+          type: string
+        type:
+          enum:
+            - aiops_log_rate_analysis
+          type: string
+      required:
+        - grid
+        - type
+        - config
+      title: Log rate analysis
       type: object
     Kibana_HTTP_APIs_kbn-dashboard-panel-type-apm_service_map:
       additionalProperties: false
@@ -94000,6 +93839,7 @@ components:
                 references:
                   items:
                     $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+                  maxItems: 10000
                   type: array
                 time_range:
                   $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-es-query-server-timeRangeSchema'
@@ -94052,6 +93892,7 @@ components:
             discriminator:
               mapping:
                 aiops_change_point_chart: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-aiops_change_point_chart'
+                aiops_log_rate_analysis: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-aiops_log_rate_analysis'
                 apm_service_map: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-apm_service_map'
                 discover_session: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-discover_session'
                 esql_control: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-esql_control'
@@ -94076,6 +93917,7 @@ components:
               - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-esql_control'
               - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-image'
               - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-links'
+              - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-aiops_log_rate_analysis'
               - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-markdown'
               - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-options_list_control'
               - $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-dashboard-panel-type-range_slider_control'
@@ -94879,6 +94721,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -96378,6 +96221,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -96600,6 +96444,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -100211,6 +100056,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -101277,6 +101123,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -101619,6 +101466,75 @@ components:
         - name
         - namespace
       title: new_agent_policy
+      type: object
+    Kibana_HTTP_APIs_new_connector:
+      additionalProperties: false
+      properties:
+        connector_type_id:
+          description: The type of connector.
+          type: string
+        name:
+          description: The display name for the connector.
+          type: string
+        config:
+          additionalProperties: {}
+          default: {}
+          description: The connector configuration details.
+          oneOf:
+            - $ref: '#/components/schemas/bedrock_config'
+            - $ref: '#/components/schemas/crowdstrike_config'
+            - $ref: '#/components/schemas/d3security_config'
+            - $ref: '#/components/schemas/email_config'
+            - $ref: '#/components/schemas/gemini_config'
+            - $ref: '#/components/schemas/resilient_config'
+            - $ref: '#/components/schemas/index_config'
+            - $ref: '#/components/schemas/jira_config'
+            - $ref: '#/components/schemas/genai_azure_config'
+            - $ref: '#/components/schemas/genai_openai_config'
+            - $ref: '#/components/schemas/genai_openai_other_config'
+            - $ref: '#/components/schemas/opsgenie_config'
+            - $ref: '#/components/schemas/pagerduty_config'
+            - $ref: '#/components/schemas/sentinelone_config'
+            - $ref: '#/components/schemas/servicenow_config'
+            - $ref: '#/components/schemas/servicenow_itom_config'
+            - $ref: '#/components/schemas/slack_api_config'
+            - $ref: '#/components/schemas/swimlane_config'
+            - $ref: '#/components/schemas/thehive_config'
+            - $ref: '#/components/schemas/tines_config'
+            - $ref: '#/components/schemas/torq_config'
+            - $ref: '#/components/schemas/webhook_config'
+            - $ref: '#/components/schemas/cases_webhook_config'
+            - $ref: '#/components/schemas/xmatters_config'
+        secrets:
+          additionalProperties: {}
+          default: {}
+          oneOf:
+            - $ref: '#/components/schemas/bedrock_secrets'
+            - $ref: '#/components/schemas/crowdstrike_secrets'
+            - $ref: '#/components/schemas/d3security_secrets'
+            - $ref: '#/components/schemas/email_secrets'
+            - $ref: '#/components/schemas/gemini_secrets'
+            - $ref: '#/components/schemas/resilient_secrets'
+            - $ref: '#/components/schemas/jira_secrets'
+            - $ref: '#/components/schemas/defender_secrets'
+            - $ref: '#/components/schemas/teams_secrets'
+            - $ref: '#/components/schemas/genai_secrets'
+            - $ref: '#/components/schemas/opsgenie_secrets'
+            - $ref: '#/components/schemas/pagerduty_secrets'
+            - $ref: '#/components/schemas/sentinelone_secrets'
+            - $ref: '#/components/schemas/servicenow_secrets'
+            - $ref: '#/components/schemas/slack_api_secrets'
+            - $ref: '#/components/schemas/swimlane_secrets'
+            - $ref: '#/components/schemas/thehive_secrets'
+            - $ref: '#/components/schemas/tines_secrets'
+            - $ref: '#/components/schemas/torq_secrets'
+            - $ref: '#/components/schemas/webhook_secrets'
+            - $ref: '#/components/schemas/cases_webhook_secrets'
+            - $ref: '#/components/schemas/xmatters_secrets'
+      required:
+        - name
+        - connector_type_id
+      title: new_connector
       type: object
     Kibana_HTTP_APIs_new_enrollment_api_key:
       additionalProperties: false
@@ -104513,6 +104429,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -105406,6 +105323,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -105813,6 +105731,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         region:
           additionalProperties: false
@@ -105986,6 +105905,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         region:
           anyOf:
@@ -108031,6 +107951,47 @@ components:
                 - from
                 - pattern
             - additionalProperties: false
+              description: URI parts processor - Parse a URI into components (scheme, domain, port, path, query, fragment, ...)
+              type: object
+              properties:
+                action:
+                  enum:
+                    - uri_parts
+                  type: string
+                customIdentifier:
+                  description: Custom identifier to correlate this processor across outputs
+                  minLength: 1
+                  type: string
+                description:
+                  description: Human-readable notes about this processor step
+                  type: string
+                from:
+                  description: Source field holding the URI string to parse
+                  minLength: 1
+                  type: string
+                ignore_failure:
+                  description: Continue pipeline execution if this processor fails
+                  type: boolean
+                ignore_missing:
+                  description: Skip processing when source field is missing
+                  type: boolean
+                keep_original:
+                  description: If true (default), preserve the original URI string alongside the extracted parts
+                  type: boolean
+                remove_if_successful:
+                  description: If true, remove the source field after a successful parse. Source field is kept on failure.
+                  type: boolean
+                to:
+                  description: 'Target field / column prefix for the extracted URI components (defaults to "url"). May equal `from` — the canonical ECS shape parses the `url` field in place. Note: combining `to === from` with `remove_if_successful: true` nulls the parsed object after writing it.'
+                  minLength: 1
+                  type: string
+                where:
+                  $ref: '#/components/schemas/Kibana_HTTP_APIs_Condition'
+                  description: Conditional expression controlling whether this processor runs
+              required:
+                - action
+                - from
+            - additionalProperties: false
               description: Date processor - Parse dates from strings using one or more expected formats
               type: object
               properties:
@@ -109108,6 +109069,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -109703,6 +109665,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -110566,6 +110529,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -111459,6 +111423,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -111539,6 +111504,70 @@ components:
         - field
         - operation
       title: Unique Count Metric Operation
+      type: object
+    Kibana_HTTP_APIs_update_connector:
+      additionalProperties: false
+      properties:
+        name:
+          description: The display name for the connector.
+          type: string
+        config:
+          additionalProperties: {}
+          default: {}
+          description: The connector configuration details.
+          oneOf:
+            - $ref: '#/components/schemas/bedrock_config'
+            - $ref: '#/components/schemas/crowdstrike_config'
+            - $ref: '#/components/schemas/d3security_config'
+            - $ref: '#/components/schemas/email_config'
+            - $ref: '#/components/schemas/gemini_config'
+            - $ref: '#/components/schemas/resilient_config'
+            - $ref: '#/components/schemas/index_config'
+            - $ref: '#/components/schemas/jira_config'
+            - $ref: '#/components/schemas/defender_config'
+            - $ref: '#/components/schemas/genai_azure_config'
+            - $ref: '#/components/schemas/genai_openai_config'
+            - $ref: '#/components/schemas/opsgenie_config'
+            - $ref: '#/components/schemas/pagerduty_config'
+            - $ref: '#/components/schemas/sentinelone_config'
+            - $ref: '#/components/schemas/servicenow_config'
+            - $ref: '#/components/schemas/servicenow_itom_config'
+            - $ref: '#/components/schemas/slack_api_config'
+            - $ref: '#/components/schemas/swimlane_config'
+            - $ref: '#/components/schemas/thehive_config'
+            - $ref: '#/components/schemas/tines_config'
+            - $ref: '#/components/schemas/torq_config'
+            - $ref: '#/components/schemas/webhook_config'
+            - $ref: '#/components/schemas/cases_webhook_config'
+            - $ref: '#/components/schemas/xmatters_config'
+        secrets:
+          additionalProperties: {}
+          default: {}
+          oneOf:
+            - $ref: '#/components/schemas/bedrock_secrets'
+            - $ref: '#/components/schemas/crowdstrike_secrets'
+            - $ref: '#/components/schemas/d3security_secrets'
+            - $ref: '#/components/schemas/email_secrets'
+            - $ref: '#/components/schemas/gemini_secrets'
+            - $ref: '#/components/schemas/resilient_secrets'
+            - $ref: '#/components/schemas/jira_secrets'
+            - $ref: '#/components/schemas/teams_secrets'
+            - $ref: '#/components/schemas/genai_secrets'
+            - $ref: '#/components/schemas/opsgenie_secrets'
+            - $ref: '#/components/schemas/pagerduty_secrets'
+            - $ref: '#/components/schemas/sentinelone_secrets'
+            - $ref: '#/components/schemas/servicenow_secrets'
+            - $ref: '#/components/schemas/slack_api_secrets'
+            - $ref: '#/components/schemas/swimlane_secrets'
+            - $ref: '#/components/schemas/thehive_secrets'
+            - $ref: '#/components/schemas/tines_secrets'
+            - $ref: '#/components/schemas/torq_secrets'
+            - $ref: '#/components/schemas/webhook_secrets'
+            - $ref: '#/components/schemas/cases_webhook_secrets'
+            - $ref: '#/components/schemas/xmatters_secrets'
+      required:
+        - name
+      title: update_connector
       type: object
     Kibana_HTTP_APIs_update_maintenance_window:
       additionalProperties: false
@@ -112984,6 +113013,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -113883,6 +113913,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         sampling:
           default: 1
@@ -115764,6 +115795,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         styling:
           $ref: '#/components/schemas/Kibana_HTTP_APIs_xyStyling'
@@ -115903,6 +115935,7 @@ components:
         references:
           items:
             $ref: '#/components/schemas/Kibana_HTTP_APIs_kbn-content-management-utils-referenceSchema'
+          maxItems: 10000
           type: array
         styling:
           $ref: '#/components/schemas/Kibana_HTTP_APIs_xyStyling'
@@ -133244,6 +133277,8 @@ components:
               $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
             enabled:
               $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+            interval:
+              $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
             name:
               $ref: '#/components/schemas/Security_Osquery_API_PackName'
             policy_ids:
@@ -133265,6 +133300,10 @@ components:
                     type: string
                   removed:
                     type: boolean
+                  rrule_schedule:
+                    $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
+                  schedule_type:
+                    $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
                   snapshot:
                     type: boolean
                   timeout:
@@ -133272,9 +133311,13 @@ components:
                   version:
                     type: string
               type: array
+            rrule_schedule:
+              $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
             saved_object_id:
               description: The saved object ID of the copied pack.
               type: string
+            schedule_type:
+              $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
             shards:
               description: Shard configuration as an array of key-value pairs.
               items:
@@ -133568,12 +133611,18 @@ components:
           $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
         enabled:
           $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+        interval:
+          $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
         name:
           $ref: '#/components/schemas/Security_Osquery_API_PackName'
         policy_ids:
           $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
         queries:
           $ref: '#/components/schemas/Security_Osquery_API_ObjectQueries'
+        rrule_schedule:
+          $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
+        schedule_type:
+          $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
         shards:
           $ref: '#/components/schemas/Security_Osquery_API_Shards'
     Security_Osquery_API_CreatePacksResponse:
@@ -133624,15 +133673,21 @@ components:
               $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
             enabled:
               $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+            interval:
+              $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
             name:
               $ref: '#/components/schemas/Security_Osquery_API_PackName'
             policy_ids:
               $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
             queries:
               $ref: '#/components/schemas/Security_Osquery_API_ObjectQueries'
+            rrule_schedule:
+              $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
             saved_object_id:
               description: The saved object ID of the pack.
               type: string
+            schedule_type:
+              $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
             shards:
               description: Shard configuration as an array of key-value pairs.
               items:
@@ -134066,6 +134121,8 @@ components:
               $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
             enabled:
               $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+            interval:
+              $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
             name:
               $ref: '#/components/schemas/Security_Osquery_API_PackName'
             namespaces:
@@ -134080,9 +134137,13 @@ components:
             read_only:
               description: Whether the pack is read-only (true for prebuilt packs).
               type: boolean
+            rrule_schedule:
+              $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
             saved_object_id:
               description: The saved object ID of the pack.
               type: string
+            schedule_type:
+              $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
             shards:
               $ref: '#/components/schemas/Security_Osquery_API_Shards'
             type:
@@ -134150,6 +134211,8 @@ components:
                 $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
               enabled:
                 $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+              interval:
+                $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
               name:
                 $ref: '#/components/schemas/Security_Osquery_API_PackName'
               policy_ids:
@@ -134171,6 +134234,10 @@ components:
                       type: string
                     removed:
                       type: boolean
+                    rrule_schedule:
+                      $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
+                    schedule_type:
+                      $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
                     snapshot:
                       type: boolean
                     timeout:
@@ -134181,9 +134248,13 @@ components:
               read_only:
                 description: Whether the pack is read-only (true for prebuilt packs).
                 type: boolean
+              rrule_schedule:
+                $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
               saved_object_id:
                 description: The saved object ID of the pack.
                 type: string
+              schedule_type:
+                $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
               updated_at:
                 format: date-time
                 type: string
@@ -134631,8 +134702,12 @@ components:
           $ref: '#/components/schemas/Security_Osquery_API_Query'
         removed:
           $ref: '#/components/schemas/Security_Osquery_API_Removed'
+        rrule_schedule:
+          $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
         saved_query_id:
           $ref: '#/components/schemas/Security_Osquery_API_SavedQueryId'
+        schedule_type:
+          $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
         snapshot:
           $ref: '#/components/schemas/Security_Osquery_API_Snapshot'
         version:
@@ -134650,6 +134725,14 @@ components:
       type: string
     Security_Osquery_API_PackIdOrUndefined:
       $ref: '#/components/schemas/Security_Osquery_API_PackId'
+      nullable: true
+    Security_Osquery_API_PackInterval:
+      description: Pack-level interval, in seconds. Used when `schedule_type` is `interval`. Mutually exclusive with `rrule_schedule`.
+      example: 60
+      minimum: 1
+      type: integer
+    Security_Osquery_API_PackIntervalOrUndefined:
+      $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
       nullable: true
     Security_Osquery_API_PackName:
       description: The pack name.
@@ -134700,6 +134783,58 @@ components:
       type: boolean
     Security_Osquery_API_RemovedOrUndefined:
       $ref: '#/components/schemas/Security_Osquery_API_Removed'
+      nullable: true
+    Security_Osquery_API_RRuleScheduleConfig:
+      description: |
+        RRULE schedule configuration consumed by osquerybeat. Loose date
+        forms like `"2024-01-01"` are rejected with 400. DTSTART is NOT
+        embedded in `rrule`; the separate `start_date` field is the
+        schedule anchor.
+      type: object
+      properties:
+        end_date:
+          description: Optional RFC 3339 datetime string for the schedule's end. MUST be after `start_date`.
+          example: '2024-12-31T23:59:59Z'
+          format: date-time
+          maxLength: 64
+          type: string
+        rrule:
+          description: |
+            Fully serialized RFC 5545 RRULE string (e.g.
+            `"FREQ=WEEKLY;BYDAY=MO,WE,FR"`). The Kibana UI writes only a
+            subset of parts — `FREQ`, `INTERVAL`, `BYDAY`, `BYMONTHDAY`,
+            `BYMONTH` — but the server accepts and round-trips any
+            well-formed parts (other recognized parts like `BYHOUR`,
+            `BYMINUTE`, `BYSETPOS`, `WKST`, `COUNT`, `UNTIL` are preserved
+            verbatim).
+          example: FREQ=WEEKLY;BYDAY=MO,WE,FR
+          maxLength: 2048
+          type: string
+        splay:
+          description: |
+            Optional Go duration string for splay (random execution delay),
+            e.g. `"30s"`, `"5m"`, `"1h"`. The Kibana form writes single-unit
+            values only; compound durations (`"1h30m"`) are tolerated on
+            read for round-trip safety with osquerybeat's writer. Maximum
+            12 hours (43200 seconds).
+          example: 5m
+          maxLength: 64
+          type: string
+        start_date:
+          description: RFC 3339 datetime string for the schedule's start.
+          example: '2024-01-01T00:00:00Z'
+          format: date-time
+          maxLength: 64
+          type: string
+        timeout:
+          description: Optional query execution timeout, in seconds. Defaults to 60 in osquerybeat when unset.
+          example: 60
+          type: number
+      required:
+        - rrule
+        - start_date
+    Security_Osquery_API_RRuleScheduleConfigOrUndefined:
+      $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
       nullable: true
     Security_Osquery_API_SavedQueryDescription:
       description: The saved query description.
@@ -134785,6 +134920,20 @@ components:
           required:
             - sourceType
             - source
+    Security_Osquery_API_ScheduleType:
+      description: |
+        Discriminator for the pack's schedule mode. `interval` uses native
+        osqueryd interval scheduling (seconds). `rrule` uses osquerybeat's
+        RRULE-based recurrence scheduling. Per-query overrides MUST use the
+        same mode as the pack — cross-mode overrides are rejected with 400.
+      enum:
+        - interval
+        - rrule
+      example: rrule
+      type: string
+    Security_Osquery_API_ScheduleTypeOrUndefined:
+      $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
+      nullable: true
     Security_Osquery_API_Shards:
       additionalProperties:
         type: number
@@ -134874,12 +135023,18 @@ components:
           $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
         enabled:
           $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+        interval:
+          $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
         name:
           $ref: '#/components/schemas/Security_Osquery_API_PackName'
         policy_ids:
           $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
         queries:
           $ref: '#/components/schemas/Security_Osquery_API_ObjectQueries'
+        rrule_schedule:
+          $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
+        schedule_type:
+          $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
         shards:
           $ref: '#/components/schemas/Security_Osquery_API_Shards'
     Security_Osquery_API_UpdatePacksResponse:
@@ -134927,15 +135082,21 @@ components:
               $ref: '#/components/schemas/Security_Osquery_API_PackDescription'
             enabled:
               $ref: '#/components/schemas/Security_Osquery_API_Enabled'
+            interval:
+              $ref: '#/components/schemas/Security_Osquery_API_PackInterval'
             name:
               $ref: '#/components/schemas/Security_Osquery_API_PackName'
             policy_ids:
               $ref: '#/components/schemas/Security_Osquery_API_PolicyIds'
             queries:
               $ref: '#/components/schemas/Security_Osquery_API_ObjectQueries'
+            rrule_schedule:
+              $ref: '#/components/schemas/Security_Osquery_API_RRuleScheduleConfig'
             saved_object_id:
               description: The saved object ID of the pack.
               type: string
+            schedule_type:
+              $ref: '#/components/schemas/Security_Osquery_API_ScheduleType'
             shards:
               $ref: '#/components/schemas/Security_Osquery_API_Shards'
             updated_at:
