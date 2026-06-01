@@ -13255,7 +13255,6 @@
     "xpack.apm.serviceMap.screenReaderInstructions": "Ceci est un mapping des services montrant les services applicatifs et leurs dépendances. Utilisez Tab pour naviguer entre les nœuds de service. Utilisez les touches fléchées pour vous déplacer entre les nœuds adjacents. Appuyez sur Entrée ou Espace pour sélectionner un nœud et consulter ses détails, y compris les connexions. Appuyez sur Échap pour fermer la fenêtre de détails. Les contrôles de zoom en haut à gauche permettent de zoomer, de dézoomer et d'ajuster la vue.",
     "xpack.apm.serviceMap.serviceDetailsButtonText": "Détails du service",
     "xpack.apm.serviceMap.serviceNode.agentInfo": "Agent : {agentName}",
-    "xpack.apm.serviceMap.serviceNode.alertsBadgeTooltip": "{count, plural, one {# active alert} other {# alertes actives}}",
     "xpack.apm.serviceMap.serviceNode.ariaLabel": "Service : {serviceName}",
     "xpack.apm.serviceMap.subtypePopoverStat": "Sous-type",
     "xpack.apm.serviceMap.timeoutPrompt.docsLink": "En savoir plus sur les paramètres APM dans la documentation",

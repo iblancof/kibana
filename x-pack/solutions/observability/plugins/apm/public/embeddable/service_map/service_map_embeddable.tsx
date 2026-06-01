@@ -20,7 +20,10 @@ import { EmptyPrompt } from '../../components/app/service_map/empty_prompt';
 import { TimeoutPrompt } from '../../components/app/service_map/timeout_prompt';
 import { useServiceMap } from '../../components/app/service_map/use_service_map';
 import { useServiceMapBadges } from '../../components/app/service_map/use_service_map_badges';
-import { ServiceMapGraph } from '../../components/app/service_map/graph';
+import {
+  ServiceMapGraph,
+  type ServiceMapFlyoutOptions,
+} from '../../components/app/service_map/graph';
 import { ServiceMapSloFlyoutProvider } from '../../components/shared/service_map/service_map_slo_flyout_context';
 import {
   SloOverviewFlyout,
@@ -58,6 +61,8 @@ export interface ServiceMapEmbeddableProps {
   onEmptyStateChange?: (isEmpty: boolean) => void;
   /** Field-value pairs to pass as filter bar pills in the "View full map" link instead of kuery. */
   filterPills?: Array<{ field: string; value: string }>;
+  /** Optional overrides for the service flyout opened from this map. */
+  flyoutOptions?: ServiceMapFlyoutOptions;
 }
 
 function LoadingSpinner() {
@@ -87,6 +92,7 @@ export function ServiceMapEmbeddable({
   strictEnvironmentScope,
   onEmptyStateChange,
   filterPills,
+  flyoutOptions,
 }: ServiceMapEmbeddableProps) {
   const license = useLicenseContext();
   const { config } = useApmPluginContext();
@@ -270,6 +276,7 @@ export function ServiceMapEmbeddable({
           showFocusMap={showFocusMapInPopover}
           alwaysNavigateOnPopoverFocus={alwaysNavigateOnPopoverFocus}
           clearKueryOnPopoverNavigation={clearKueryOnPopoverNavigation}
+          flyoutOptions={flyoutOptions}
         />
       </div>
       {sloOverviewFlyout && (
