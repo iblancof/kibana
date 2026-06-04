@@ -13,6 +13,7 @@ import type { ApmDataSourceWithSummary } from '../../../../../common/data_source
 import { ApmDocumentType } from '../../../../../common/document_type';
 import {
   EVENT_OUTCOME,
+  EVENT_SUCCESS_COUNT,
   METRIC_SYSTEM_CPU_PERCENT,
   METRIC_SYSTEM_FREE_MEMORY,
   METRIC_SYSTEM_TOTAL_MEMORY,
@@ -344,6 +345,7 @@ function getThroughputChart(
 }
 
 function getFailedTransactionRateChart(
+  source: ApmDataSourceWithSummary | undefined,
   indexes: string | undefined,
   scope: ServiceScope
 ): FlyoutLensChartConfigDefinition {
@@ -351,16 +353,31 @@ function getFailedTransactionRateChart(
     defaultMessage: 'Failed transaction rate',
   });
 
+  const isMetrics =
+    source?.documentType === ApmDocumentType.ServiceTransactionMetric ||
+    source?.documentType === ApmDocumentType.TransactionMetric;
+
   return buildChartDefinition({
     id: 'failedTransactionRate',
     title,
     indexes,
     buildQuery: (idx) => {
-      const query = createBaseServiceQuery({ indexes: idx, processorEvent: 'transaction', scope });
-      query.pipe(
-        `STATS failure = COUNT(*) WHERE TO_STRING(${EVENT_OUTCOME}) == "failure", all = COUNT(*) BY ${TIME_BUCKET_BY}`
-      );
-      query.pipe('EVAL failed_transaction_rate = TO_DOUBLE(failure) / all');
+      const query = createBaseServiceQuery({
+        indexes: idx,
+        processorEvent: isMetrics ? undefined : 'transaction',
+        scope,
+      });
+      if (isMetrics) {
+        query.pipe(
+          `STATS success = SUM(${EVENT_SUCCESS_COUNT}), total = COUNT(${EVENT_SUCCESS_COUNT}) BY ${TIME_BUCKET_BY}`
+        );
+        query.pipe('EVAL failed_transaction_rate = TO_DOUBLE(total - success) / total');
+      } else {
+        query.pipe(
+          `STATS failure = COUNT(*) WHERE TO_STRING(${EVENT_OUTCOME}) == "failure", all = COUNT(*) BY ${TIME_BUCKET_BY}`
+        );
+        query.pipe('EVAL failed_transaction_rate = TO_DOUBLE(failure) / all');
+      }
       query.pipe('KEEP timestamp, failed_transaction_rate');
       query.pipe('SORT timestamp');
       return query;
@@ -475,7 +492,7 @@ export function getChartDefinitions({
     keyMetrics: [
       getLatencyChart(source, indexes, scope, latencyAggregationType, latencyTitleAction),
       getThroughputChart(indexes, scope),
-      getFailedTransactionRateChart(indexes, scope),
+      getFailedTransactionRateChart(source, indexes, scope),
     ],
     infrastructureMetrics: [
       getCpuUsageChart(indexes, metricScope),
