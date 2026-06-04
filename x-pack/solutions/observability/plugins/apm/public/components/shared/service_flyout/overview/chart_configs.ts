@@ -316,14 +316,57 @@ function getLatencyChart(
 }
 
 function getThroughputChart(
+  source: ApmDataSourceWithSummary | undefined,
   indexes: string | undefined,
   scope: ServiceScope
 ): FlyoutLensChartConfigDefinition {
+  const title = i18n.translate('xpack.apm.serviceFlyout.throughputChartTitle', {
+    defaultMessage: 'Throughput',
+  });
+  const label = i18n.translate('xpack.apm.serviceFlyout.throughputSeriesLabel', {
+    defaultMessage: 'Throughput',
+  });
+
+  const isMetrics =
+    source?.documentType === ApmDocumentType.ServiceTransactionMetric ||
+    source?.documentType === ApmDocumentType.TransactionMetric;
+
+  if (isMetrics && source && indexes) {
+    // COUNT(transaction.duration.summary) reads the value_count sub-metric of the
+    // aggregate_metric_double field — this gives the actual transaction count, unlike
+    // COUNT(*) which counts physical rollup docs (always 1 per bucket).
+    // DATE_TRUNC aligns buckets with the rollup interval so each bucket contains
+    // exactly one pre-aggregated doc, then we divide by the interval to get tpm.
+    const intervalMinutes = parseInt(source.rollupInterval, 10);
+    return buildChartDefinition({
+      id: 'throughput',
+      title,
+      indexes,
+      buildQuery: (idx) => {
+        const query = createBaseServiceQuery({ indexes: idx, processorEvent: undefined, scope });
+        query.pipe(
+          `STATS total = COUNT(${TRANSACTION_DURATION_SUMMARY}) BY timestamp = DATE_TRUNC(${source.rollupInterval}, @timestamp)`
+        );
+        query.pipe(`EVAL tpm = TO_DOUBLE(total) / ${intervalMinutes}.0`);
+        query.pipe('KEEP timestamp, tpm');
+        query.pipe('SORT timestamp');
+        return query;
+      },
+      yAxis: [
+        {
+          label,
+          value: 'tpm',
+          format: 'number',
+          decimals: 1,
+          seriesColor: seriesColor(ChartType.THROUGHPUT),
+        },
+      ],
+    });
+  }
+
   return buildChartDefinition({
     id: 'throughput',
-    title: i18n.translate('xpack.apm.serviceFlyout.throughputChartTitle', {
-      defaultMessage: 'Throughput',
-    }),
+    title,
     indexes,
     buildQuery: (idx) => {
       const query = createBaseServiceQuery({ indexes: idx, processorEvent: 'transaction', scope });
@@ -332,9 +375,7 @@ function getThroughputChart(
     },
     yAxis: [
       {
-        label: i18n.translate('xpack.apm.serviceFlyout.throughputSeriesLabel', {
-          defaultMessage: 'Throughput',
-        }),
+        label,
         value: 'COUNT(*)',
         format: 'number',
         decimals: 0,
@@ -491,7 +532,7 @@ export function getChartDefinitions({
   return {
     keyMetrics: [
       getLatencyChart(source, indexes, scope, latencyAggregationType, latencyTitleAction),
-      getThroughputChart(indexes, scope),
+      getThroughputChart(source, indexes, scope),
       getFailedTransactionRateChart(source, indexes, scope),
     ],
     infrastructureMetrics: [

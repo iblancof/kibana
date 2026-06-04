@@ -42,8 +42,11 @@ function ServiceFlyoutLensChartComponent({
       return undefined;
     }
     const builder = new LensConfigBuilder(dataViews);
+    const isEsql = 'esql' in (config.dataset ?? {});
     return builder.build(config, {
-      query: { esql: (config.dataset as LensESQLDataset).esql },
+      query: isEsql
+        ? { esql: (config.dataset as LensESQLDataset).esql }
+        : { language: 'kuery', query: '' },
     }) as Promise<LensAttributes>;
   }, [config, dataViews]);
 
@@ -94,7 +97,6 @@ function ServiceFlyoutLensChartComponent({
             timeRange={timeRange}
             hidePanelTitles
             noPadding
-            withDefaultActions={false}
             lastReloadRequestTime={refreshToken}
             viewMode="view"
             style={{ height: CHART_HEIGHT }}
