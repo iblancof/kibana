@@ -9,6 +9,8 @@ import type { ReactNode } from 'react';
 import { esql, type ComposerQuery } from '@elastic/esql';
 import { i18n } from '@kbn/i18n';
 import type { LensConfig, LensSeriesLayer } from '@kbn/lens-embeddable-utils';
+import type { ApmDataSourceWithSummary } from '../../../../../common/data_source';
+import { ApmDocumentType } from '../../../../../common/document_type';
 import {
   EVENT_OUTCOME,
   METRIC_SYSTEM_CPU_PERCENT,
@@ -18,13 +20,30 @@ import {
   SERVICE_ENVIRONMENT,
   SERVICE_NAME,
   TRANSACTION_DURATION,
+  TRANSACTION_DURATION_HISTOGRAM,
+  TRANSACTION_DURATION_SUMMARY,
   TRANSACTION_TYPE,
 } from '../../../../../common/es_fields/apm';
 import { ENVIRONMENT_ALL } from '../../../../../common/environment_filter_values';
 import { LatencyAggregationType } from '../../../../../common/latency_aggregation_types';
+import type { RollupInterval } from '../../../../../common/rollup';
 import { ChartType, getTimeSeriesColor } from '../../charts/helper/get_timeseries_color';
 
-type FlyoutLensChartProcessorEvent = 'transaction' | 'metric';
+export function getPreferredIndex(
+  documentType: ApmDocumentType,
+  rollupInterval: RollupInterval
+): string {
+  switch (documentType) {
+    case ApmDocumentType.ServiceTransactionMetric:
+      return `metrics-apm.service_transaction.${rollupInterval}-default`;
+    case ApmDocumentType.TransactionMetric:
+      return `metrics-apm.transaction.${rollupInterval}-default`;
+    default:
+      return 'traces-apm-*,apm-*';
+  }
+}
+
+type FlyoutLensChartProcessorEvent = 'transaction' | 'metric' | undefined;
 
 interface FlyoutLensChartConfigDefinition {
   id: string;
@@ -56,8 +75,13 @@ function createBaseServiceQuery({
 }): ComposerQuery {
   const { serviceName, environment, kuery, transactionType } = scope;
 
-  const query = esql.from(indexes).where`${esql.col(PROCESSOR_EVENT)} == ${processorEvent}`
-    .where`${esql.col(SERVICE_NAME)} == ${serviceName}`;
+  const query = esql.from(indexes);
+
+  if (processorEvent !== undefined) {
+    query.where`${esql.col(PROCESSOR_EVENT)} == ${processorEvent}`;
+  }
+
+  query.where`${esql.col(SERVICE_NAME)} == ${serviceName}`;
 
   if (transactionType) {
     query.where`${esql.col(TRANSACTION_TYPE)} == ${transactionType}`;
@@ -174,19 +198,101 @@ export function getLatencyChartType(latencyAggregationType: LatencyAggregationTy
   }
 }
 
+interface MetricsLatencyAggregationConfig {
+  label: string;
+  statsExpr: string;
+  resultColumn: string;
+}
+
+function getMetricsLatencyAggregationConfig(
+  latencyAggregationType: LatencyAggregationType,
+  hasDurationSummaryField: boolean
+): MetricsLatencyAggregationConfig {
+  const durationField = hasDurationSummaryField
+    ? TRANSACTION_DURATION_SUMMARY
+    : `TO_TDIGEST(${TRANSACTION_DURATION_HISTOGRAM})`;
+
+  switch (latencyAggregationType) {
+    case LatencyAggregationType.p95:
+      return {
+        label: i18n.translate('xpack.apm.serviceFlyout.latency95thSeriesLabel', {
+          defaultMessage: '95th percentile',
+        }),
+        statsExpr: `PERCENTILE(${durationField}, 95)`,
+        resultColumn: 'latency_us',
+      };
+    case LatencyAggregationType.p99:
+      return {
+        label: i18n.translate('xpack.apm.serviceFlyout.latency99thSeriesLabel', {
+          defaultMessage: '99th percentile',
+        }),
+        statsExpr: `PERCENTILE(${durationField}, 99)`,
+        resultColumn: 'latency_us',
+      };
+    case LatencyAggregationType.avg:
+    default:
+      return {
+        label: i18n.translate('xpack.apm.serviceFlyout.latencyAverageSeriesLabel', {
+          defaultMessage: 'Average latency',
+        }),
+        statsExpr: `PERCENTILE(${durationField}, 50)`,
+        resultColumn: 'latency_us',
+      };
+  }
+}
+
 function getLatencyChart(
+  source: ApmDataSourceWithSummary | undefined,
   indexes: string | undefined,
   scope: ServiceScope,
   latencyAggregationType: LatencyAggregationType,
   titleAction?: ReactNode
 ): FlyoutLensChartConfigDefinition {
+  const title = i18n.translate('xpack.apm.serviceFlyout.latencyChartTitle', {
+    defaultMessage: 'Latency',
+  });
+
+  const isMetrics =
+    source?.documentType === ApmDocumentType.ServiceTransactionMetric ||
+    source?.documentType === ApmDocumentType.TransactionMetric;
+
+  if (isMetrics && source) {
+    const { label, statsExpr, resultColumn } = getMetricsLatencyAggregationConfig(
+      latencyAggregationType,
+      source.hasDurationSummaryField
+    );
+
+    return buildChartDefinition({
+      id: 'latency',
+      title,
+      titleAction,
+      indexes,
+      buildQuery: (idx) => {
+        const query = createBaseServiceQuery({ indexes: idx, processorEvent: undefined, scope });
+        query.pipe(`STATS ${resultColumn} = ${statsExpr} BY ${TIME_BUCKET_BY}`);
+        query.pipe(`EVAL latency_ms = TO_DOUBLE(${resultColumn}) / 1000`);
+        query.pipe(`KEEP timestamp, latency_ms`);
+        query.pipe(`SORT timestamp`);
+        return query;
+      },
+      yAxis: [
+        {
+          label,
+          value: 'latency_ms',
+          format: 'number',
+          decimals: 0,
+          suffix: ' ms',
+          seriesColor: seriesColor(getLatencyChartType(latencyAggregationType)),
+        },
+      ],
+    });
+  }
+
   const { label, aggregation } = getLatencyAggregationConfig(latencyAggregationType);
 
   return buildChartDefinition({
     id: 'latency',
-    title: i18n.translate('xpack.apm.serviceFlyout.latencyChartTitle', {
-      defaultMessage: 'Latency',
-    }),
+    title,
     titleAction,
     indexes,
     buildQuery: (idx) => {
@@ -339,7 +445,7 @@ function getMemoryUsageChart(
 }
 
 export function getChartDefinitions({
-  indexes,
+  source,
   serviceName,
   environment,
   kuery,
@@ -347,7 +453,7 @@ export function getChartDefinitions({
   latencyAggregationType,
   latencyTitleAction,
 }: {
-  indexes: string | undefined;
+  source: ApmDataSourceWithSummary | undefined;
   serviceName: string;
   environment: string;
   kuery: string;
@@ -358,12 +464,16 @@ export function getChartDefinitions({
   keyMetrics: FlyoutLensChartConfigDefinition[];
   infrastructureMetrics: FlyoutLensChartConfigDefinition[];
 } {
+  const indexes = source
+    ? getPreferredIndex(source.documentType, source.rollupInterval)
+    : undefined;
+
   const scope: ServiceScope = { serviceName, environment, kuery, transactionType };
   const metricScope: ServiceScope = { serviceName, environment, kuery };
 
   return {
     keyMetrics: [
-      getLatencyChart(indexes, scope, latencyAggregationType, latencyTitleAction),
+      getLatencyChart(source, indexes, scope, latencyAggregationType, latencyTitleAction),
       getThroughputChart(indexes, scope),
       getFailedTransactionRateChart(indexes, scope),
     ],
