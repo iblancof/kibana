@@ -20,7 +20,8 @@ import React, { useMemo, useState } from 'react';
 import { LatencyAggregationType } from '../../../../../common/latency_aggregation_types';
 import type { Environment } from '../../../../../common/environment_rt';
 import type { ServiceNodeData } from '../../../../../common/service_map';
-import { useAdHocApmDataView } from '../../../../hooks/use_adhoc_apm_data_view';
+import { ApmDocumentType } from '../../../../../common/document_type';
+import { usePreferredDataSourceAndBucketSize } from '../../../../hooks/use_preferred_data_source_and_bucket_size';
 import { LatencyAggregationTypeSelect } from '../../charts/latency_chart/latency_aggregation_type_select';
 import { getChartDefinitions } from './chart_configs';
 import { ServiceFlyoutLensChart } from './lens_chart';
@@ -113,13 +114,19 @@ export function ServiceFlyoutOverview({
   onTransactionTypeChange,
 }: ServiceFlyoutOverviewProps) {
   const [latencyAggregationType, setLatencyAggregationType] = useState(LatencyAggregationType.avg);
-  const { dataView } = useAdHocApmDataView();
-  const indexes = dataView?.getIndexPattern();
+
+  const preferred = usePreferredDataSourceAndBucketSize({
+    start: rangeFrom,
+    end: rangeTo,
+    kuery,
+    numBuckets: 100,
+    type: ApmDocumentType.ServiceTransactionMetric,
+  });
 
   const { keyMetrics, infrastructureMetrics } = useMemo(
     () =>
       getChartDefinitions({
-        indexes,
+        source: preferred?.source,
         serviceName: service.id,
         environment,
         kuery,
@@ -132,7 +139,7 @@ export function ServiceFlyoutOverview({
           />
         ),
       }),
-    [environment, indexes, kuery, latencyAggregationType, service.id, transactionType]
+    [environment, preferred?.source, kuery, latencyAggregationType, service.id, transactionType]
   );
 
   return (
