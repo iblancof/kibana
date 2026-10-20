@@ -1,136 +1,197 @@
-# elasticsearch:
-#   hosts: https://iblancof-edge-oblt-c-gviug-slack.es.us-west2.gcp.elastic-cloud.com:443
-#   username: kibana_system_user
-#   password: 60vHFpvB15F1iIJ3mZxo5LEG
-#   ssl:
-#     verificationMode: none
-# server:
-#   host: 0.0.0.0
-#   restrictInternalApis: false
-# #
-# # Enable HTTP/2 and TLS
-# # To generate a new encryption key and self-signed certificate, run:
-# # openssl req -x509 -newkey rsa:2048 -keyout ${PWD}/key.pem -out ${PWD}/cert.crt -days 365 -subj '/CN=*' -nodes
-# #
-# #  protocol: http2
-# #  ssl:
-# #    enabled: true
-# #    key: path/to/key.pem
-# #    certificate: path/my/cerf.crt
-# # Logs and Metrics - see https://elastic.github.io/observability-test-environments/tools/oblt-cli/local-kibana/#post-configuration
-# # Monitoring
-# monitoring.ui.logs.index: remote_cluster:filebeat-*,filebeat-*
-# xpack:
-#   encryptedSavedObjects:
-#     encryptionKey: +8v9e/XMV54RsPThrAfoOWMxOyh9ZZ1BCyTA0z8A97I=
-#   security:
-#     encryptionKey: AdKUEsCmSj40lfIzuIhhdX2wdIiMRLHo
-#     loginAssistanceMessage: 'Credentials: admin / 60vHFpvB15F1iIJ3mZxo5LEG'
-# # APM
-#   apm_sources_access:
-#     indices:
-#       error: remote_cluster:apm-*,remote_cluster:logs-apm*,remote_cluster:logs-*.otel-*,apm-*,logs-apm*,logs-*.otel-*
-#       onboarding: remote_cluster:apm-*,apm-*
-#       span: remote_cluster:apm-*,remote_cluster:traces-apm*,remote_cluster:traces-*.otel-*,apm-*,traces-apm*,traces-*.otel-*
-#       transaction: remote_cluster:apm-*,remote_cluster:traces-apm*,remote_cluster:traces-*.otel-*,apm-*,traces-apm*,traces-*.otel-*
-#       metric: remote_cluster:apm-*,remote_cluster:metrics-apm*,remote_cluster:metrics-*.otel-*,apm-*,metrics-apm*,metrics-*.otel-*
-#       sourcemap: remote_cluster:apm-*,apm-*
-#   uptime:
-#     index: synthetics-*,heartbeat-*,remote_cluster:heartbeat-*,remote_cluster:synthetics-*
-#     service:
-#       manifestUrl: https://manifest.synthetics.elastic.dev/v1/manifest.json
-#       password: BMEPfe6Ag9IG0PKUsN7YI0WW6j
-#       username: synthetics
-#       hosts: ["https://iblancof-edge-oblt-c-gviug-slack.es.us-west2.gcp.elastic-cloud.com:443"]
-# xpack.security.authc.providers:
-#   basic.basic1:
-#     order: 0
-# uiSettings:
-#   overrides:
-#     'observability:logSources':
-#       - "remote_cluster:logs-*"
-#       - "remote_cluster:filebeat-*"
-#       - "remote_cluster:kibana_sample_data_logs*"
-#       - "logs-*"
-#       - "filebeat-*"
-#       - "kibana_sample_data_logs*"
-#     'securitySolution:defaultIndex':
-#       - "apm-*-transaction*"
-#       - "auditbeat-*"
-#       - "endgame-*"
-#       - "filebeat-*"
-#       - "logs-*"
-#       - "packetbeat-*"
-#       - "traces-apm*"
-#       - "winlogbeat-*"
-#       - "-*elastic-cloud-logs-*"
-#       - "remote_cluster:apm-*-transaction*"
-#       - "remote_cluster:auditbeat-*"
-#       - "remote_cluster:endgame-*"
-#       - "remote_cluster:filebeat-*"
-#       - "remote_cluster:logs-*"
-#       - "remote_cluster:packetbeat-*"
-#       - "remote_cluster:traces-apm*"
-#       - "remote_cluster:winlogbeat-*"
-#       - "remote_cluster:-*elastic-cloud-logs-*"
-#     'securitySolution:defaultThreatIndex':
-#       - "logs-ti_*"
-#       - "remote_cluster:logs-ti_*"
-#     'observability:apmUseUnifiedTraceWaterfall': true
-# xpack.alerting_v2.enabled: true
-# xpack.spaces.defaultSolution: oblt
-# # Miscellaneous
-# # only valid on dev mode
-# elasticsearch.ignoreVersionMismatch: true
-# # Monitoring with APM
-# # elastic:
-# #   apm:
-# #     active: true
-# #     serverUrl: https://monitoring-oblt.apm.us-west2.gcp.elastic-cloud.com:443
-# #     secretToken: VwTJMFNGvRaiwVdxnW
-# #     centralConfig: false
-# #     breakdownMetrics: true
-# #     transactionSampleRate: 0.5
-# #     metricsInterval: '120s'
-# #     globalLabels:
-# #       deploymentName: iblancof-edge-oblt-c-gviug-slack
-# #       elasticStack: 9.6.0-SNAPSHOT
-# # Add this to kibana.dev.yml to see debug statements just for the APM plugin
-# # logging.loggers:
-# #   - name: plugins.apm
-# #     level: debug
-# #     appenders: [console]
-# # Report this local Kibana's own logs, metrics and traces to this cluster via the
-# # Elasticsearch OTLP/HTTP endpoint - https://www.elastic.co/docs/manage-data/ingest/otlp-endpoint
-# # Not a supported configuration, useful only for local Kibana development/debugging.
-# # logging.appenders.otel:
-# #   type: otel
-# #   protocol: proto
-# #   url: https://iblancof-edge-oblt-c-gviug-slack.es.us-west2.gcp.elastic-cloud.com:443/_otlp/v1/logs
-# #   headers:
-# #     authorization: "ApiKey "
-# # logging.root.appenders: [ default, otel ]
-# # telemetry.metrics:
-# #   enabled: true
-# #   interval: 10s
-# #   exporters:
-# #     - proto:
-# #         url: https://iblancof-edge-oblt-c-gviug-slack.es.us-west2.gcp.elastic-cloud.com:443/_otlp/v1/metrics
-# #         headers:
-# #           authorization: "ApiKey "
-# # telemetry.tracing:
-# #   enabled: true
-# #   sample_rate: 1
-# #   exporters:
-# #     - proto:
-# #         url: https://iblancof-edge-oblt-c-gviug-slack.es.us-west2.gcp.elastic-cloud.com:443/_otlp/v1/traces
-# #         headers:
-# #           authorization: "ApiKey "
-# #
-# # Sample: run a local Kibana against this cluster with the above settings,
-# # the API key is already filled in from this cluster's secrets:
-# #   oblt-cli cluster secrets kibana-config --cluster-name iblancof-edge-oblt-c-gviug-slack --output-file kibana.yml
-# #   oblt-cli cluster run kibana --cluster-name iblancof-edge-oblt-c-gviug-slack --sources /path/to/kibana --kibana-config kibana.yml
+# For more configuration options see the configuration guide for Kibana in
+# https://www.elastic.co/guide/index.html
 
+# =================== System: Kibana Server ===================
+# Kibana is served by a back end server. This setting specifies the port to use.
+#server.port: 5601
 
-xpack.entityInventoryApp.enabled: true
+# Specifies the address to which the Kibana server will bind. IP addresses and host names are both valid values.
+# The default is 'localhost', which usually means remote machines will not be able to connect.
+# To allow connections from remote users, set this parameter to a non-loopback address.
+#server.host: "localhost"
+
+# Enables you to specify a path to mount Kibana at if you are running behind a proxy.
+# Use the `server.rewriteBasePath` setting to tell Kibana if it should remove the basePath
+# from requests it receives, and to prevent a deprecation warning at startup.
+# This setting cannot end in a slash.
+#server.basePath: ""
+
+# Specifies whether Kibana should rewrite requests that are prefixed with
+# `server.basePath` or require that they are rewritten by your reverse proxy.
+# Defaults to `false`.
+#server.rewriteBasePath: false
+
+# Specifies the public URL at which Kibana is available for end users. If
+# `server.basePath` is configured this URL should end with the same basePath.
+#server.publicBaseUrl: ""
+
+# The maximum payload size in bytes for incoming server requests.
+#server.maxPayload: 1048576
+
+# The Kibana server's name. This is used for display purposes.
+#server.name: "your-hostname"
+
+# Block requests to specific routes (exact path match, evaluated before auth).
+# server.excludeRoutes: ["/api/status"]
+
+# =================== System: Kibana Server (Optional) ===================
+# Enables SSL and paths to the PEM-format SSL certificate and SSL key files, respectively.
+# These settings enable SSL for outgoing requests from the Kibana server to the browser.
+#server.ssl.enabled: false
+#server.ssl.certificate: /path/to/your/server.crt
+#server.ssl.key: /path/to/your/server.key
+
+# =================== System: Elasticsearch ===================
+# The URLs of the Elasticsearch instances to use for all your queries.
+#elasticsearch.hosts: ["http://localhost:9200"]
+
+# If your Elasticsearch is protected with basic authentication, these settings provide
+# the username and password that the Kibana server uses to perform maintenance on the Kibana
+# index at startup. Your Kibana users still need to authenticate with Elasticsearch, which
+# is proxied through the Kibana server.
+#elasticsearch.username: "kibana_system"
+#elasticsearch.password: "pass"
+
+# Kibana can also authenticate to Elasticsearch via "service account tokens".
+# Service account tokens are Bearer style tokens that replace the traditional username/password based configuration.
+# Use this token instead of a username/password.
+# elasticsearch.serviceAccountToken: "my_token"
+
+# Time in milliseconds to wait for responses from the back end or Elasticsearch. This value
+# must be a positive integer.
+#elasticsearch.requestTimeout: 30000
+
+# The maximum number of sockets that can be used for communications with elasticsearch.
+# Defaults to `800`.
+#elasticsearch.maxSockets: 1024
+
+# Specifies whether Kibana should use compression for communications with elasticsearch
+# Defaults to `false`.
+#elasticsearch.compression: false
+
+# List of Kibana client-side headers to send to Elasticsearch. To send *no* client-side
+# headers, set this value to [] (an empty list).
+#elasticsearch.requestHeadersWhitelist: [ authorization ]
+
+# Header names and values that are sent to Elasticsearch. Any custom headers cannot be overwritten
+# by client-side headers, regardless of the elasticsearch.requestHeadersWhitelist configuration.
+#elasticsearch.customHeaders: {}
+
+# Time in milliseconds for Elasticsearch to wait for responses from shards. Set to 0 to disable.
+#elasticsearch.shardTimeout: 30000
+
+# =================== System: Elasticsearch (Optional) ===================
+# These files are used to verify the identity of Kibana to Elasticsearch and are required when
+# xpack.security.http.ssl.client_authentication in Elasticsearch is set to required.
+#elasticsearch.ssl.certificate: /path/to/your/client.crt
+#elasticsearch.ssl.key: /path/to/your/client.key
+
+# Enables you to specify a path to the PEM file for the certificate
+# authority for your Elasticsearch instance.
+#elasticsearch.ssl.certificateAuthorities: [ "/path/to/your/CA.pem" ]
+
+# To disregard the validity of SSL certificates, change this setting's value to 'none'.
+#elasticsearch.ssl.verificationMode: full
+
+# =================== System: Logging ===================
+# Set the value of this setting to off to suppress all logging output, or to debug to log everything. Defaults to 'info'
+#logging.root.level: debug
+
+# Enables you to specify a file where Kibana stores log output.
+#logging.appenders.default:
+#  type: file
+#  fileName: /var/logs/kibana.log
+#  layout:
+#    type: json
+
+# Example with size based log rotation
+#logging.appenders.default:
+#  type: rolling-file
+#  fileName: /var/logs/kibana.log
+#  policy:
+#    type: size-limit
+#    size: 256mb
+#  strategy:
+#    type: numeric
+#    max: 10
+#  layout:
+#    type: json
+
+# Logs queries sent to Elasticsearch.
+#logging.loggers:
+#  - name: elasticsearch.query
+#    level: debug
+
+# Enable verbose logging for a subset of traffic via meta filters (requires
+# matching labels.* on the log call site). See logging.loggers[].filters.
+#logging.loggers:
+#  - name: plugins.alerting
+#    level: warn
+#    filters:
+#      - type: meta
+#        match:
+#          [labels.ruleType]: esql
+#        level: debug
+
+# Logs http responses.
+#logging.loggers:
+#  - name: http.server.response
+#    level: debug
+
+# Logs system usage information.
+#logging.loggers:
+#  - name: metrics.ops
+#    level: debug
+
+# Enables debug logging on the browser (dev console)
+#logging.browser.root:
+#  level: debug
+
+# =================== System: Other ===================
+# The path where Kibana stores persistent data not saved in Elasticsearch. Defaults to data
+#path.data: data
+
+# Specifies the path where Kibana creates the process ID file.
+#pid.file: /run/kibana/kibana.pid
+
+# Set the interval in milliseconds to sample system and process performance
+# metrics. Minimum is 100ms. Defaults to 5000ms.
+#ops.interval: 5000
+
+# Specifies the available locales in the user profile settings.
+#i18n.locales: ["en", "fr-FR", "ja-JP", "zh-CN", "de-DE", "pt-BR"]
+
+# Specifies the default locale to be used for all localizable strings, dates and number formats.
+# User profile settings allow users to customize their display language. This setting determines the default locale when no user settings are specified.
+# Supported languages are the following: English "en" (default), Chinese "zh-CN", Japanese "ja-JP", French "fr-FR", German "de-DE".
+#i18n.defaultLocale: "en"
+
+# =================== Frequently used (Optional)===================
+
+# =================== Saved Objects: Migrations ===================
+# Saved object migrations run at startup. If you run into migration-related issues, you might need to adjust these settings.
+
+# The number of documents migrated at a time.
+# If Kibana can't start up or upgrade due to an Elasticsearch `circuit_breaking_exception`,
+# use a smaller batchSize value to reduce the memory pressure. Defaults to 1000 objects per batch.
+#migrations.batchSize: 1000
+
+# The maximum payload size for indexing batches of upgraded saved objects.
+# To avoid migrations failing due to a 413 Request Entity Too Large response from Elasticsearch.
+# This value should be lower than or equal to your Elasticsearch cluster’s `http.max_content_length`
+# configuration option. Default: 100mb
+#migrations.maxBatchSizeBytes: 100mb
+
+# The number of times to retry temporary migration failures. Increase the setting
+# if migrations fail frequently with a message such as `Unable to complete the [...] step after
+# 15 attempts, terminating`. Defaults to 15
+#migrations.retryAttempts: 15
+
+# =================== Search Autocomplete ===================
+# Time in milliseconds to wait for autocomplete suggestions from Elasticsearch.
+# This value must be a whole number greater than zero. Defaults to 1000ms
+# unifiedSearch.autocomplete.valueSuggestions.timeout: 1000
+
+# Maximum number of documents loaded by each shard to generate autocomplete suggestions.
+# This value must be a whole number greater than zero. Defaults to 100_000
+#unifiedSearch.autocomplete.valueSuggestions.terminateAfter: 100000
